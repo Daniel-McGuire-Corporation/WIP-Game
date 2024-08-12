@@ -97,6 +97,8 @@ void updateCamera(sf::RenderWindow& window, sf::RectangleShape& player) {
 }
 
 int main() {
+	std::cout << "Untitled Game" << std::endl;
+	std::cout << "Copyright 2024 Daniel McGuire Corporation" << std::endl;
     sf::RenderWindow window(sf::VideoMode(800, 600), APP_NAME);
 
     // Load textures
