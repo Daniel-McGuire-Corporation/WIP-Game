@@ -3,7 +3,7 @@
 #include <SFML/Graphics.hpp>
 
 
-const std::string APP_NAME = "Platformer Game";
+const std::string APP_NAME = "wierd stickman jump";
 
 extern sf::RectangleShape player;
 extern float velocityY;
