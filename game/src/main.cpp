@@ -6,13 +6,16 @@
 #include <sstream>
 #include <thread>
 #include <chrono>
-#include <windows.h> // For MessageBox
+#include <windows.h> 
+#include <filesystem> 
 #include "globals.hpp"
 #include "debug.hpp"
 #include "game.hpp"
 
 // Variables
 const int TILE_SIZE = 40;
+
+namespace fs = std::filesystem;
 
 // Function to check collision between player and platform
 bool isColliding(const sf::RectangleShape& player, const sf::RectangleShape& platform) {
@@ -48,10 +51,10 @@ std::vector<sf::RectangleShape> loadLevel(const std::string& filename, const sf:
         for (int x = 0; x < line.size(); ++x) {
             if (line[x] == '1' || line[x] == 'G') {
                 sf::RectangleShape platform(sf::Vector2f(TILE_SIZE, TILE_SIZE));
-                if (line[x] == '1' && floorTexture) {
-                    platform.setTexture(floorTexture);
-                } else if (line[x] == 'G' && platformTexture) {
+                if (line[x] == '1' && platformTexture) {
                     platform.setTexture(platformTexture);
+                } else if (line[x] == 'G' && floorTexture) {
+                    platform.setTexture(floorTexture);
                 } else {
                     platform.setFillColor(line[x] == '1' ? sf::Color::Red : sf::Color::Blue);
                 }
@@ -97,8 +100,9 @@ void updateCamera(sf::RenderWindow& window, sf::RectangleShape& player) {
 }
 
 int main() {
-	std::cout << APP_NAME << std::endl;
-	std::cout << "Copyright 2024 Daniel McGuire Corporation" << std::endl;
+    std::cout << APP_NAME << std::endl;
+    std::cout << "Copyright 2024 Daniel McGuire Corporation" << std::endl;
+
     sf::RenderWindow window(sf::VideoMode(800, 600), APP_NAME);
 
     // Load textures
@@ -115,19 +119,19 @@ int main() {
     }
 
     sf::Texture floorTexture;
-    if (!floorTexture.loadFromFile("./data/txd/floatingplatform.png")) {
+    if (!floorTexture.loadFromFile("./data/txd/base.png")) {
         MessageBox(NULL, "Error loading floor texture", "Texture Error", MB_ICONERROR | MB_OK);
         return -1; // Exit if texture loading fails
     }
 
     sf::Texture platformTexture;
-    if (!platformTexture.loadFromFile("./data/txd/base.png")) {
+    if (!platformTexture.loadFromFile("./data/txd/platform.png")) {
         MessageBox(NULL, "Error loading platform texture", "Texture Error", MB_ICONERROR | MB_OK);
         return -1; // Exit if texture loading fails
     }
 
     // Player setup
-    player.setSize(sf::Vector2f(40.0f, 40.0f));
+    sf::RectangleShape player(sf::Vector2f(40.0f, 40.0f));
     if (playerTexture.getSize().x > 0) {
         player.setTexture(&playerTexture);
     } else {
@@ -135,8 +139,11 @@ int main() {
     }
     player.setPosition(380.0f, -100.0f); // Start 280 pixels to the right of the original start position
 
-    // Load level
-    std::vector<sf::RectangleShape> platforms = loadLevel("level.ini", floorTexture.getSize().x > 0 ? &floorTexture : nullptr, platformTexture.getSize().x > 0 ? &platformTexture : nullptr);
+    // Define a level file
+    std::string levelFile = "data/levels/level1.ini"; // Set the level file here
+
+    // Load the level
+    std::vector<sf::RectangleShape> platforms = loadLevel(levelFile, floorTexture.getSize().x > 0 ? &floorTexture : nullptr, platformTexture.getSize().x > 0 ? &platformTexture : nullptr);
 
     // Start the debug thread
     startDebugThread();
