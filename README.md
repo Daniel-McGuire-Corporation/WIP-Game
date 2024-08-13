@@ -22,18 +22,9 @@
    Use the provided build script to compile the project. The script will handle necessary build configurations:
 
    ```powershell
-   .\make.ps1
+   .\make.ps1 -compile (-run) -game
    ```
-
-## Usage
-
-1. **Run the Executable**
-
-   After building, run the executable to start the game.
-
-   ```bash
-   ./bin/game.exe
-   ```
+## USAGE:
 
 2. **Game Controls**
 
@@ -50,7 +41,7 @@ Levels are defined in `.ini` files located in the `data/levels` directory. The f
 To enable debugging features, you have to recomp:
 
 ```powershell
-.\make.ps1 -debug 
+.\make.ps1 -compile -debug -game (-run)
 ```
 
 ## Known Issues
