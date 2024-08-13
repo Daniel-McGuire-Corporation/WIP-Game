@@ -81,19 +81,7 @@ if ($compile) {
 	Copy-Item -Path 3rdpty\bin\* -Destination tools\bin\ -Recurse
 	Write-Host "Copied DLLs" -ForegroundColor Green
     Clear-Host
-    if ($tools -or $all) {
-        Write-Host "Compiling level viewer..." -ForegroundColor Yellow
-        rc /fo levelview_resources.res .\tools\src\levelview\ico.rc
-        cl /EHsc /std:c++17 /MP /I"./3rdpty/include" .\tools\src\levelview\levelviewer.cpp .\tools\src\levelview\nfd_common.c .\tools\src\levelview\nfd_win.cpp levelview_resources.res /link /LIBPATH:"./3rdpty/lib" Ole32.lib Shell32.lib User32.lib sfml-graphics.lib Comdlg32.lib sfml-window.lib sfml-system.lib /MACHINE:X86 /SUBSYSTEM:WINDOWS /OUT:"./tools/bin/levelviewer.exe"
-        Write-Host "Compiled Level Viewer" -ForegroundColor Green
-
-        Write-Host "Compiling Level Editor" -ForegroundColor Yellow
-        pip install pyinstaller
-        pyinstaller --onefile --windowed --distpath .\tools\bin\ --workpath .\tmp .\tools\src\leveledit\leveleditor.py --icon .\tools\src\leveledit\edit.ico
-        Copy-Item -Path tools\src\leveledit\edit.ico -Destination tools\bin\edit.ico
-        Write-Host "Compiled Level Editor" -ForegroundColor Green
-    }
-    if ($editor -or $all) {
+    if ($editor -or $tools -or $all) {
         Write-Host "Compiling level editor..." -ForegroundColor Yellow
         pip install pyinstaller
         if ($debug) {
@@ -105,7 +93,7 @@ if ($compile) {
         Copy-Item -Path tools\src\leveledit\edit.ico -Destination tools\bin\edit.ico
         Write-Host "Compiled Level Editor" -ForegroundColor Green
     }
-    if ($viewer -or $all) {
+    if ($viewer -or $tools -or $all) {
         Write-Host "Compiling level viewer..." -ForegroundColor Yellow
         rc /fo levelview_resources.res .\tools\src\levelview\ico.rc
         cl /EHsc /std:c++17 /MP /I"./3rdpty/include" .\tools\src\levelview\levelviewer.cpp .\tools\src\levelview\nfd_common.c .\tools\src\levelview\nfd_win.cpp levelview_resources.res /link /LIBPATH:"./3rdpty/lib" Ole32.lib Shell32.lib User32.lib sfml-graphics.lib Comdlg32.lib sfml-window.lib sfml-system.lib /MACHINE:X86 /SUBSYSTEM:WINDOWS /OUT:"./tools/bin/levelviewer.exe"
