@@ -5,7 +5,7 @@ class LevelEditor(tk.Tk):
     def __init__(self):
         super().__init__()
 
-        self.title("DMC Level Editor")
+        self.title("Level Editor")
         self.geometry("800x600")
         self.state('zoomed')  # Start in maximized state
         self.iconbitmap('edit.ico')
@@ -89,7 +89,7 @@ class LevelEditor(tk.Tk):
             return
 
         preview_window = Toplevel(self)
-        preview_window.title("DMC Level Editor Preview")
+        preview_window.title("Level Editor - Preview Pane")
         preview_window.geometry("800x600")
         preview_window.resizable(False, False)  # Disable resizing
         preview_window.attributes('-toolwindow', True)  # Disable maximizing
