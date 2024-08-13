@@ -93,6 +93,7 @@ class LevelEditor(tk.Tk):
         preview_window.geometry("800x600")
         preview_window.resizable(False, False)  # Disable resizing
         preview_window.attributes('-toolwindow', True)  # Disable maximizing
+        preview_window.attributes("-topmost", True)
 
         # Create canvas and scrollbar
         self.canvas = Canvas(preview_window, bg='#121212', width=800, height=600)
