@@ -201,7 +201,7 @@ if ($setupengine) {
     Write-Output "Cleaning up nativefiledialog..."
     Remove-Item -Path $nativeFileDialogTempZipPath -Force
     Remove-Item -Path $nativeFileDialogExtractedPath -Recurse -Force
-
+    Remove-Item -Path .\makeinit.ps1 -Recurse -Force
     Write-Output "Engine setup completed."
     exit
 }
