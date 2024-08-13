@@ -35,3 +35,6 @@
 /bin
 /tmp
 /tools/bin
+game_resources.res
+leveleditor.spec
+levelview_resources.res
