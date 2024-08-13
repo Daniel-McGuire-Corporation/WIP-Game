@@ -31,3 +31,7 @@
 *.out
 *.app
 /release
+/3rdpty
+/bin
+/tmp
+/tools/bin
