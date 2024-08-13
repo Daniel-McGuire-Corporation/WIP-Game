@@ -3,7 +3,7 @@
 
 ## Prerequisites
 - Windows 10 x64 or later
-- [Visual Studio 17 Build Tools (or VS Studio](https://aka.ms/vs/17/release/vs_BuildTools.exe) 
+- [Visual Studio 17 Build Tools (or VS Studio)](https://aka.ms/vs/17/release/vs_BuildTools.exe) 
 
 
 
