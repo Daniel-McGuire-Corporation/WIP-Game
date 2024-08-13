@@ -2,12 +2,14 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <cstdlib>
 #include <string>
 #include <sstream>
 #include <thread>
 #include <chrono>
 #include <windows.h> 
-#include <filesystem> 
+#include <filesystem>
+#include "../ai/enemie.hpp" 
 #include "../vari.hpp"
 
 // Conditional inclusion of debug functionalities
@@ -19,6 +21,7 @@
 
 // Variables
 const int TILE_SIZE = 40;
+const float DEATH_HEIGHT = 600.0f;
 std::atomic<bool> running(true);
 
 namespace fs = std::filesystem;
@@ -40,7 +43,7 @@ void handlePlayerMovement(sf::RectangleShape& player, float& velocityY, bool& is
         velocityY = -5.0f;
         isJumping = true;
     }
-
+    
     // Apply gravity
     velocityY += GRAVITY;
     player.move(0.0f, velocityY);
@@ -110,13 +113,14 @@ int main() {
 #else
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
 #endif
-    std::cout << APP_NAME << std::endl;
-    std::cout << "Copyright 2024 Daniel McGuire Corporation" << std::endl;
-	#ifdef DEBUG_BUILD
+    std::cout << APP_NAME << "Debug Prompt (C++ 17)" << std::endl;
+    
+    #ifdef DEBUG_BUILD
     sf::RenderWindow window(sf::VideoMode(800, 600), "debug_gamewindow");
-	#else
-	sf::RenderWindow window(sf::VideoMode(800, 600), APP_NAME);
-	#endif
+    #else
+    sf::RenderWindow window(sf::VideoMode(800, 600), APP_NAME);
+    #endif
+
     // Load textures
     sf::Texture backgroundTexture;
     if (!backgroundTexture.loadFromFile("./data/txd/back.png")) {
@@ -165,6 +169,20 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     // Wait for 2 seconds before dropping the player
     std::this_thread::sleep_for(std::chrono::seconds(2));
 
+    float velocityY = 0.0f; // Initialize velocityY
+    bool isJumping = false; // Initialize isJumping
+    std::vector<Enemy> enemies;
+    sf::Texture enemyTexture;
+    if (!enemyTexture.loadFromFile("./data/txd/enemy.png")) {
+        MessageBox(NULL, "Error loading enemy texture", "Texture Error", MB_ICONERROR | MB_OK);
+        return -1; // Exit if texture loading fails
+    }
+
+    // Spawn initial enemies
+    for (int i = 0; i < 3; ++i) {
+        enemies.emplace_back(enemyTexture, 100.0f * i, 0.0f); // Spawn enemies at different x positions
+    }
+
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event)) {
@@ -185,28 +203,32 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                     isJumping = false;
                 }
             }
+
+            // Update enemies
+            updateEnemies(enemies, player, window.getSize().y);
+
+            // Handle enemy collisions
+            handleEnemyCollisions(enemies, player);
+
+            // Check if the player has fallen below the death height
+            if (player.getPosition().y > DEATH_HEIGHT) {
+                std::abort(); // Crash the game
+            }
         }
 
         window.clear();
 
         // Draw the background as tiles
-        sf::Sprite backgroundSprite(backgroundTexture);
-        int backgroundWidth = backgroundTexture.getSize().x;
-        int backgroundHeight = backgroundTexture.getSize().y;
-        int screenWidth = window.getSize().x;
-        int screenHeight = window.getSize().y;
-        for (int x = 0; x < screenWidth; x += backgroundWidth) {
-            for (int y = 0; y < screenHeight; y += backgroundHeight) {
-                backgroundSprite.setPosition(x, y);
-                window.draw(backgroundSprite);
-            }
-        }
+        drawTiledBackground(window, backgroundTexture);
 
         updateCamera(window, player);
 
         window.draw(player);
         for (auto& platform : platforms) {
             window.draw(platform);
+        }
+        for (auto& enemy : enemies) {
+            enemy.draw(window);
         }
         window.display();
     }
