@@ -8,6 +8,7 @@ class LevelEditor(tk.Tk):
         self.title("DMC Level Editor")
         self.geometry("800x600")
         self.state('zoomed')  # Start in maximized state
+        self.iconbitmap('edit.ico')
 
         self.file_path = None  # Track the current file path
         self.text_edit = tk.Text(self, bg='#121212', fg='#FFFFFF', insertbackground='white')
