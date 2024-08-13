@@ -13,10 +13,10 @@ param (
 	[switch]$clean
 )
 
-cmd /c taskkill /im game.exe /F
-cmd /c taskkill /im game-debug.exe /f
-cmd /c taskkill /im leveleditor.exe /f
-cmd /c taskkill /im levelviewer.exe /f
+cmd /c taskkill /im game.exe /F 
+cmd /c taskkill /im game-debug.exe /f 
+cmd /c taskkill /im leveleditor.exe /f 
+cmd /c taskkill /im levelviewer.exe /f 
 if ($clean) {
 	Write-Host "Cleaning Directories" -ForegroundColor Yellow
 	Remove-Item -Path bin\* -Recurse -Force
@@ -122,7 +122,7 @@ Register-EngineEvent PowerShell.Exiting -Action {
 
 
 
-function Show-Help {
+if ($help -or $h) {
     Write-Host "Options:" -ForegroundColor Cyan
     Write-Host "  -run             Run the specified program(s)"
     Write-Host "  -compile         Compile specified targets"
