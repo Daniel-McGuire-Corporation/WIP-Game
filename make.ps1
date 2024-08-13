@@ -17,6 +17,22 @@ cmd /c taskkill /im game.exe /F
 cmd /c taskkill /im game-debug.exe /f
 cmd /c taskkill /im leveleditor.exe /f
 cmd /c taskkill /im levelviewer.exe /f
+if ($clean) {
+	Write-Host "Cleaning Directories" -ForegroundColor Yellow
+	Remove-Item -Path bin\* -Recurse -Force
+	Remove-Item -Path bin -Recurse -Force
+	Remove-Item -Path tools\bin\* -Recurse -Force
+	Remove-Item -Path tools\bin -Recurse -Force
+	Remove-Item -Path tmp\* -Recurse -Force
+	Remove-Item -Path tmp -Recurse -Force
+	Remove-Item -Path *.obj -Recurse -Force
+	Remove-Item -Path *.res -Recurse -Force
+	Write-Host "Cleaned Directories." -ForegroundColor Green
+	Clear-Host
+	Write-Host "Untited-Game Make Script"
+	Write-Host "(c) 2024 Daniel McGuire"
+	Write-Host ""
+}
 clear-host
 Write-Host "Untited-Game Make Script"
 Write-Host "(c) 2024 Daniel McGuire"
@@ -28,6 +44,83 @@ if ($null -eq $clPath) {
     Write-Host "Please start this script from the Visual Studio Developer PowerShell."
     exit
 }
+
+function Download-FileWithProgress {
+    param (
+        [string]$url,
+        [string]$destinationPath
+    )
+
+    $request = [System.Net.HttpWebRequest]::Create($url)
+    $request.Method = "HEAD"
+    
+    try {
+        $response = $request.GetResponse()
+        $contentLength = $response.Headers["Content-Length"]
+        $response.Close()
+    } catch {
+        Write-Error "Failed to get file size from $url. $_"
+        return
+    }
+
+    if ([string]::IsNullOrEmpty($contentLength)) {
+		Invoke-WebRequest -Uri $url -OutFile $destinationPath
+    }
+
+    $request = [System.Net.HttpWebRequest]::Create($url)
+    $request.Method = "GET"
+    
+    try {
+        $response = $request.GetResponse()
+        $responseStream = $response.GetResponseStream()
+        $fileStream = [System.IO.File]::Create($destinationPath)
+
+        $buffer = New-Object byte[] 8192
+        $totalBytesRead = 0
+        $bytesRead = 0
+
+        $retryCount = 0
+		$maxRetries = 3
+
+while (($bytesRead = $responseStream.Read($buffer, 0, $buffer.Length)) -gt 0) {
+    $fileStream.Write($buffer, 0, $bytesRead)
+    $totalBytesRead += $bytesRead
+
+    if ($contentLength -ne $null -and $contentLength -gt 0) {
+        $progress = [math]::Round(($totalBytesRead / [int64]$contentLength) * 100, 2)
+        
+        try {
+            Write-Progress -Activity "Downloading Package" -PercentComplete $progress -Status "Downloading..." -CurrentOperation "Progress: $progress%"
+            $retryCount = 0  # Reset retry count on success
+        } catch {
+            Write-Output "Write-Progress failed. Attempting retry $($retryCount + 1) of $maxRetries"
+            $retryCount++
+            if ($retryCount -ge $maxRetries) {
+                Write-Error "Write-Progress failed after $maxRetries attempts. Exiting..."
+                break
+            }
+        }
+    }
+}
+
+
+        $fileStream.Close()
+        $responseStream.Close()
+        Write-Output "Download completed."
+    } catch {
+        Write-Error "Failed to download file from $url. $_"
+    }
+}
+# Variable to handle cancellation
+$global:cancelDownload = $false
+
+# Register interrupt handling
+Register-EngineEvent PowerShell.Exiting -Action {
+    $global:cancelDownload = $true
+} | Out-Null
+
+
+
 
 function Show-Help {
     Write-Host "Options:" -ForegroundColor Cyan
@@ -55,24 +148,8 @@ function Show-Help {
     Write-Host "$ .\main -compile -run -game"
 }
 
-if ($clean) {
-	Write-Host "Cleaning Directories" -ForegroundColor Yellow
-	Remove-Item -Path bin\* -Recurse -Force
-	Remove-Item -Path bin -Recurse -Force
-	Remove-Item -Path tools\bin\* -Recurse -Force
-	Remove-Item -Path tools\bin -Recurse -Force
-	Remove-Item -Path tmp\* -Recurse -Force
-	Remove-Item -Path tmp -Recurse -Force
-	Remove-Item -Path *.obj -Recurse -Force
-	Remove-Item -Path *.res -Recurse -Force
-	Write-Host "Cleaned Directories." -ForegroundColor Green
-	Clear-Host
-	Write-Host "Untited-Game Make Script"
-	Write-Host "(c) 2024 Daniel McGuire"
-	Write-Host ""
-}
-
 if ($setupengine) {
+	clear-host
     # Define paths for SFML
     $sfmlZipUrl = "https://www.sfml-dev.org/files/SFML-2.6.1-windows-vc17-32-bit.zip"
     $sfmlTempZipPath = "$env:TEMP\SFML-2.6.1-windows-vc17-32-bit.zip"
@@ -81,7 +158,7 @@ if ($setupengine) {
 
     # Download SFML zip file
     Write-Output "Downloading SFML..."
-    Invoke-WebRequest -Uri $sfmlZipUrl -OutFile $sfmlTempZipPath
+    Download-FileWithProgress -url $sfmlZipUrl -destinationPath $sfmlTempZipPath
 
     # Extract the zip file
     Write-Output "Extracting SFML..."
@@ -101,7 +178,7 @@ if ($setupengine) {
     Write-Output "Cleaning up SFML..."
     Remove-Item -Path $sfmlTempZipPath -Force
     Remove-Item -Path $sfmlExtractedPath -Recurse -Force
-
+	clear-host
     # Define paths for nativefiledialog
     $nativeFileDialogZipUrl = "https://github.com/mlabbe/nativefiledialog/archive/refs/heads/master.zip"
     $nativeFileDialogTempZipPath = "$env:TEMP\nativefiledialog-master.zip"
@@ -110,7 +187,7 @@ if ($setupengine) {
 
     # Download nativefiledialog zip file
     Write-Output "Downloading nativefiledialog..."
-    Invoke-WebRequest -Uri $nativeFileDialogZipUrl -OutFile $nativeFileDialogTempZipPath
+    Download-FileWithProgress -url $nativeFileDialogZipUrl -destinationPath $nativeFileDialogTempZipPath
 
     # Extract the zip file
     Write-Output "Extracting nativefiledialog..."
