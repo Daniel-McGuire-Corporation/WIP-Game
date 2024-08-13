@@ -3,7 +3,6 @@
 
 ## Prerequisites
 - Windows 10 x64 or later
-- [CMAKE](https://github.com/Kitware/CMake/releases/download/v3.30.2/cmake-3.30.2-windows-x86_64.msi)
 - [Visual Studio 17 Build Tools (or VS Studio](https://aka.ms/vs/17/release/vs_BuildTools.exe) 
 
 
@@ -16,19 +15,22 @@
    git clone --recurse-submodules https://github.com/Daniel-McGuire-Corporation/WIP-Game.git
    cd WIP-Game
    ```
+   
+2. **Setup**
+   ```bash
+   ./make -setupengine
+   ```
 
 
 2. **Compile the Project**
-   1. [Compile SFML](https://www.sfml-dev.org/tutorials/2.6/compile-with-cmake.php)
-
-   2. Use the provided build script to compile the project. The script will handle necessary build configurations:
+   1. Use the provided build script to compile the project. The script will handle necessary build configurations:
 
    ```powershell
    .\make.ps1 -compile (-run) -game
    ```
 ## USAGE:
 
-2. **Game Controls**
+**Game Controls**
 
    - **Left Arrow:** Move left
    - **Right Arrow:** Move right
