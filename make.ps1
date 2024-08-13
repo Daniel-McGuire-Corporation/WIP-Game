@@ -51,5 +51,10 @@ Write-Host "Compiled GAME" -ForegroundColor Green
 Write-Host "Compiling Tools" -ForegroundColor Yellow
 cl /EHsc /std:c++17 /MP /I"./3rdpty/include" .\tools\src\levelview\levelviewer.cpp .\tools\src\levelview\nfd_common.c .\tools\src\levelview\nfd_win.cpp /link /LIBPATH:"./3rdpty/lib" Ole32.lib Shell32.lib User32.lib sfml-graphics.lib Comdlg32.lib sfml-window.lib sfml-system.lib /MACHINE:X86 /SUBSYSTEM:WINDOWS /OUT:"./tools/bin/levelviewer.exe"
 Write-Host "Compiled Level Viewer" -ForegroundColor Green
+ 
+Write-Host "Compiling Tools" -ForegroundColor Yellow
 
+Write-Host "Compiled Level Viewer" -ForegroundColor Green
+pip install pyinstaller
+pyinstaller --onefile --distpath .\tools\bin\ --workpath .\tmp .\tools\src\leveledit\leveleditor.py
 Write-Host "Compilation Completed!" -ForegroundColor Green
