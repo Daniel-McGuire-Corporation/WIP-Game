@@ -108,13 +108,36 @@ void updateCamera(sf::RenderWindow& window, sf::RectangleShape& player) {
     window.setView(view);
 }
 
+bool loadASIsFromScriptsFolder() {
+    std::string folderPath = "./scripts/";
+    for (const auto& entry : fs::directory_iterator(folderPath)) {
+        if (entry.path().extension() == ".asi") {
+            HMODULE hModule = LoadLibraryW(entry.path().c_str()); // Use LoadLibraryW for wide characters
+            if (!hModule) {
+                std::wcerr << L"Failed to load ASI: " << entry.path() << std::endl;
+                return false;
+            } else {
+                std::wcout << L"Successfully loaded ASI: " << entry.path() << std::endl;
+            }
+        }
+    }
+    return true;
+}
+
+
 #ifdef DEBUG_BUILD
 int main() {
 #else
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
 #endif
     std::cout << APP_NAME << "Debug Prompt (C++ 17)" << std::endl;
-    
+
+    // Load ASIs from the ./scripts/ folder
+    if (!loadASIsFromScriptsFolder()) {
+        MessageBox(NULL, "Error loading ASIs", "ASI Load Error", MB_ICONERROR | MB_OK);
+        return -1; // Exit if ASI loading fails
+    }
+
     #ifdef DEBUG_BUILD
     sf::RenderWindow window(sf::VideoMode(800, 600), "debug_gamewindow");
     #else
