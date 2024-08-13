@@ -134,12 +134,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
     // Load ASIs from the ./scripts/ folder
     if (!loadASIsFromScriptsFolder()) {
+        std::cerr << "ASI ERROR" << std::endl;
         MessageBoxA(NULL, "Error loading ASIs", "ASI Load Error", MB_ICONERROR | MB_OK);
         return -1; // Exit if ASI loading fails
     }
 
     #ifdef DEBUG_BUILD
-    sf::RenderWindow window(sf::VideoMode(800, 600), "debug_gamewindow");
+    sf::RenderWindow window(sf::VideoMode(800, 600), "debug");
     #else
     sf::RenderWindow window(sf::VideoMode(800, 600), APP_NAME);
     #endif
@@ -147,24 +148,28 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     // Load textures
     sf::Texture backgroundTexture;
     if (!backgroundTexture.loadFromFile("./data/txd/back.png")) {
+        std::cerr << "Error loading background texture" << std::endl;
         MessageBoxA(NULL, "Error loading background texture", "Texture Error", MB_ICONERROR | MB_OK);
         return -1; // Exit if texture loading fails
     }
 
     sf::Texture playerTexture;
     if (!playerTexture.loadFromFile("./data/txd/user.png")) {
+        std::cerr << "Error loading player texture" << std::endl;
         MessageBoxA(NULL, "Error loading player texture", "Texture Error", MB_ICONERROR | MB_OK);
         return -1; // Exit if texture loading fails
     }
 
     sf::Texture floorTexture;
     if (!floorTexture.loadFromFile("./data/txd/base.png")) {
+        std::cerr << "Error loading floor texture" << std::endl;
         MessageBoxA(NULL, "Error loading floor texture", "Texture Error", MB_ICONERROR | MB_OK);
         return -1; // Exit if texture loading fails
     }
 
     sf::Texture platformTexture;
     if (!platformTexture.loadFromFile("./data/txd/platform.png")) {
+        std::cerr << "Error loading platform texture" << std::endl;
         MessageBoxA(NULL, "Error loading platform texture", "Texture Error", MB_ICONERROR | MB_OK);
         return -1; // Exit if texture loading fails
     }
@@ -197,6 +202,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     std::vector<Enemy> enemies;
     sf::Texture enemyTexture;
     if (!enemyTexture.loadFromFile("./data/txd/enemy.png")) {
+        std::cerr << "Error loading enemy texture" << std::endl;
         MessageBoxA(NULL, "Error loading enemy texture", "Texture Error", MB_ICONERROR | MB_OK);
         return -1; // Exit if texture loading fails
     }
@@ -235,7 +241,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
             // Check if the player has fallen below the death height
             if (player.getPosition().y > DEATH_HEIGHT) {
-                std::abort(); // Crash the game
+                std::cout << "Player fell below camera." << std::endl;
+                MessageBoxA(NULL, "Player fell below camera.", "Boundary issue", MB_ICONERROR | MB_OK);
+                return -1;
             }
         }
 
