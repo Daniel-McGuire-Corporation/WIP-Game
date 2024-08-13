@@ -112,9 +112,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 #endif
     std::cout << APP_NAME << std::endl;
     std::cout << "Copyright 2024 Daniel McGuire Corporation" << std::endl;
-
-    sf::RenderWindow window(sf::VideoMode(800, 600), APP_NAME);
-
+	#ifdef DEBUG_BUILD
+    sf::RenderWindow window(sf::VideoMode(800, 600), "debug_gamewindow");
+	#else
+	sf::RenderWindow window(sf::VideoMode(800, 600), APP_NAME);
+	#endif
     // Load textures
     sf::Texture backgroundTexture;
     if (!backgroundTexture.loadFromFile("./data/txd/back.png")) {
