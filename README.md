@@ -23,8 +23,6 @@
 
 
 2. **Compile the Project**
-   1. Use the provided build script to compile the project. The script will handle necessary build configurations:
-
    ```powershell
    .\make.ps1 -compile (-run) -game
    ```
