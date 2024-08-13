@@ -71,7 +71,7 @@ std::string openFileDialog() {
 // ... [rest of your code]
 
 int APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
-    sf::RenderWindow window(sf::VideoMode(800, 600), "Level Viewer");
+    sf::RenderWindow window(sf::VideoMode(800, 600), "Untitled Game | Level Viewer");
 
     // Load textures
     sf::Texture floorTexture;

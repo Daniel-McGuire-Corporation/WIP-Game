@@ -3,11 +3,9 @@
 #include <SFML/Graphics.hpp>
 
 
-const std::string APP_NAME = "wierd stickman jump";
+const std::string APP_NAME = "Untitled Game";
 
 extern sf::RectangleShape player;
-extern float velocityY;
-extern bool isJumping;
 
 void resetGame();
 
