@@ -8,12 +8,18 @@
 #include <chrono>
 #include <windows.h> 
 #include <filesystem> 
-#include "globals.hpp"
+#include "../vari.hpp"
+
+// Conditional inclusion of debug functionalities
+#ifdef DEBUG_BUILD
 #include "../debug/debug.hpp"
+#endif
+
 #include "game.hpp"
 
 // Variables
 const int TILE_SIZE = 40;
+std::atomic<bool> running(true);
 
 namespace fs = std::filesystem;
 
@@ -99,7 +105,11 @@ void updateCamera(sf::RenderWindow& window, sf::RectangleShape& player) {
     window.setView(view);
 }
 
+#ifdef DEBUG_BUILD
 int main() {
+#else
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
+#endif
     std::cout << APP_NAME << std::endl;
     std::cout << "Copyright 2024 Daniel McGuire Corporation" << std::endl;
 
@@ -145,8 +155,10 @@ int main() {
     // Load the level
     std::vector<sf::RectangleShape> platforms = loadLevel(levelFile, floorTexture.getSize().x > 0 ? &floorTexture : nullptr, platformTexture.getSize().x > 0 ? &platformTexture : nullptr);
 
+    #ifdef DEBUG_BUILD
     // Start the debug thread
     startDebugThread();
+    #endif
 
     // Wait for 2 seconds before dropping the player
     std::this_thread::sleep_for(std::chrono::seconds(2));

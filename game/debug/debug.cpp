@@ -1,6 +1,5 @@
 #include "debug.hpp"
-#include "game.hpp"
-#include "globals.hpp"
+#include "../game/game.hpp"
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -10,24 +9,16 @@
 #include <Windows.h>
 #include <map>
 #include <algorithm>
+#include "../vari.hpp"
 
-// Global variables
-float MOVE_SPEED = 1.0f;
-float GRAVITY = 0.1f;
-float JUMP_HEIGHT = 0.1f;
 
 sf::RectangleShape player(sf::Vector2f(50.0f, 50.0f));
-float velocityY = 0.0f;
-bool isJumping = false;
 
 void resetGame() {
     player.setPosition(100.0f, -100.0f); // Reset player position
     velocityY = 0.0f;
     isJumping = false;
 }
-
-// Global atomic variable
-std::atomic<bool> running(true);
 
 // Enumeration for commands
 enum Command {
@@ -175,7 +166,7 @@ void debugThreadFunction() {
     freopen("CONIN$", "r", stdin);
     freopen("CONOUT$", "w", stdout);
     freopen("CONOUT$", "w", stderr);
-    SetConsoleTitle(("DEBUG | " + APP_NAME).c_str());
+    SetConsoleTitle((APP_NAME + " | DEBUG ").c_str());
     while (running) {
         handleDebugCommands();
     }
