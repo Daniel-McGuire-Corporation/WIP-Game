@@ -12,14 +12,15 @@
 1. **Clone the Repository**
 
    ```bash
-   git clone https://github.com/Daniel-McGuire-Corporation/WIP-Game.git
+   git clone --recurse-submodules https://github.com/Daniel-McGuire-Corporation/WIP-Game.git
    cd WIP-Game
    ```
 
 
 2. **Compile the Project**
+   1. [Compile SFML](https://www.sfml-dev.org/tutorials/2.6/compile-with-cmake.php)
 
-   Use the provided build script to compile the project. The script will handle necessary build configurations:
+   2. Use the provided build script to compile the project. The script will handle necessary build configurations:
 
    ```powershell
    .\make.ps1 -compile (-run) -game
