@@ -9,7 +9,7 @@
 #include <windows.h> 
 #include <filesystem> 
 #include "globals.hpp"
-#include "debug.hpp"
+#include "../debug/debug.hpp"
 #include "game.hpp"
 
 // Variables

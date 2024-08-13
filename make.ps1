@@ -36,7 +36,7 @@ Write-Host "Starting Compilation" -ForegroundColor Yellow
 
 # Compile game files
 Write-Host "Compiling GAME" -ForegroundColor Yellow
-cl /EHsc /std:c++17 /MP /I".\3rdpty\include" .\game\src\main.cpp .\game\src\debug.cpp /link /LIBPATH:".\3rdpty\lib" User32.lib sfml-graphics.lib sfml-window.lib sfml-system.lib /MACHINE:X86 /OUT:".\bin\game.exe"
+cl /EHsc /std:c++17 /MP /I".\3rdpty\include" .\game\src\main.cpp .\game\src\debug\debug.cpp /link /LIBPATH:".\3rdpty\lib" User32.lib sfml-graphics.lib sfml-window.lib sfml-system.lib /MACHINE:X86 /OUT:".\bin\game.exe"
 Write-Host "Compiled GAME" -ForegroundColor Green
 
 Write-Host "Compiling Tools" -ForegroundColor Yellow
