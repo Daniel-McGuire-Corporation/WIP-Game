@@ -3,7 +3,7 @@
 #include <SFML/Graphics.hpp>
 
 
-const std::string APP_NAME = "Untitled Game";
+const std::string APP_NAME = "Untitled Game ";
 
 extern sf::RectangleShape player;
 
