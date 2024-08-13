@@ -2,7 +2,8 @@
 # Untitled Game
 
 ## Prerequisites
-- Windows 10 or later
+- Windows 10 x64 or later
+- [CMAKE](https://github.com/Kitware/CMake/releases/download/v3.30.2/cmake-3.30.2-windows-x86_64.msi)
 - Visual Studio 17 (VS Build Tools is all thats required.)
 
 
