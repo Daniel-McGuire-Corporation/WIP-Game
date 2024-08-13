@@ -9,8 +9,15 @@ param (
     [switch]$all,
     [switch]$help,
     [switch]$h,
-    [switch]$setupengine
+    [switch]$setupengine,
+	[switch]$clean
 )
+
+cmd /c taskkill /im game.exe /F
+cmd /c taskkill /im game-debug.exe /f
+cmd /c taskkill /im leveleditor.exe /f
+cmd /c taskkill /im levelviewer.exe /f
+clear-host
 Write-Host "Untited-Game Make Script"
 Write-Host "(c) 2024 Daniel McGuire"
 Write-Host ""
@@ -38,6 +45,7 @@ function Show-Help {
     Write-Host "Misc options:"-ForegroundColor Cyan
     Write-Host "  -debug           Specify debug"
     Write-Host "  -help, -h        Show this help message"
+	Write-Host "  -clean           Clean all exes, objs, etc"
     Write-Host ""
     Write-Host "Usage:"
     Write-Host "$ .\main <OPTION(S)> <ITEM(S)> [misc]"
@@ -47,55 +55,82 @@ function Show-Help {
     Write-Host "$ .\main -compile -run -game"
 }
 
+if ($clean) {
+	Write-Host "Cleaning Directories" -ForegroundColor Yellow
+	Remove-Item -Path bin\* -Recurse -Force
+	Remove-Item -Path bin -Recurse -Force
+	Remove-Item -Path tools\bin\* -Recurse -Force
+	Remove-Item -Path tools\bin -Recurse -Force
+	Remove-Item -Path tmp\* -Recurse -Force
+	Remove-Item -Path tmp -Recurse -Force
+	Remove-Item -Path *.obj -Recurse -Force
+	Remove-Item -Path *.res -Recurse -Force
+	Write-Host "Cleaned Directories." -ForegroundColor Green
+	Clear-Host
+	Write-Host "Untited-Game Make Script"
+	Write-Host "(c) 2024 Daniel McGuire"
+	Write-Host ""
+}
+
 if ($setupengine) {
-    # Define paths
+    # Define paths for SFML
     $sfmlZipUrl = "https://www.sfml-dev.org/files/SFML-2.6.1-windows-vc17-32-bit.zip"
-    $tempZipPath = "$env:TEMP\SFML-2.6.1-windows-vc17-32-bit.zip"
-    $extractedPath = "$env:TEMP\SFML-2.6.1"
-    $destinationPath = ".\3rdpty"
+    $sfmlTempZipPath = "$env:TEMP\SFML-2.6.1-windows-vc17-32-bit.zip"
+    $sfmlExtractedPath = "$env:TEMP\SFML-2.6.1"
+    $sfmlDestinationPath = ".\3rdpty"
 
     # Download SFML zip file
-    Write-Output "Downloading Engine..."
-    Invoke-WebRequest -Uri $sfmlZipUrl -OutFile $tempZipPath
+    Write-Output "Downloading SFML..."
+    Invoke-WebRequest -Uri $sfmlZipUrl -OutFile $sfmlTempZipPath
 
     # Extract the zip file
-    Invoke-WebRequest -Uri $sfmlZipUrl -OutFile $tempZipPath
-
-    # Extract the zip file
-    Write-Output "Extracting Engine..."
-    Expand-Archive -Path $tempZipPath -DestinationPath $extractedPath -Force
+    Write-Output "Extracting SFML..."
+    Expand-Archive -Path $sfmlTempZipPath -DestinationPath $sfmlExtractedPath -Force
 
     # Ensure the destination directory exists
-    if (-not (Test-Path $destinationPath)) {
-        Write-Output "Creating destination directory..."
-        New-Item -ItemType Directory -Path $destinationPath | Out-Null
+    if (-not (Test-Path $sfmlDestinationPath)) {
+        Write-Output "Creating SFML destination directory..."
+        New-Item -ItemType Directory -Path $sfmlDestinationPath | Out-Null
     }
 
     # Copy the contents to the destination directory
-    Write-Output "Copying files to destination..."
-    Copy-Item -Path "$extractedPath\SFML-2.6.1\*" -Destination $destinationPath -Recurse -Force
+    Write-Output "Copying SFML files to destination..."
+    Copy-Item -Path "$sfmlExtractedPath\SFML-2.6.1\*" -Destination $sfmlDestinationPath -Recurse -Force
 
-    # Cleanup
-    Write-Output "Cleaning up..."
-    Remove-Item -Path $tempZipPath -Force
-    Remove-Item -Path $extractedPath -Recurse -Force
+    # Cleanup SFML
+    Write-Output "Cleaning up SFML..."
+    Remove-Item -Path $sfmlTempZipPath -Force
+    Remove-Item -Path $sfmlExtractedPath -Recurse -Force
+
+    # Define paths for nativefiledialog
+    $nativeFileDialogZipUrl = "https://github.com/mlabbe/nativefiledialog/archive/refs/heads/master.zip"
+    $nativeFileDialogTempZipPath = "$env:TEMP\nativefiledialog-master.zip"
+    $nativeFileDialogExtractedPath = "$env:TEMP\nativefiledialog-master"
+    $nativeFileDialogDestinationPath = ".\3rdpty"
+
+    # Download nativefiledialog zip file
+    Write-Output "Downloading nativefiledialog..."
+    Invoke-WebRequest -Uri $nativeFileDialogZipUrl -OutFile $nativeFileDialogTempZipPath
+
+    # Extract the zip file
+    Write-Output "Extracting nativefiledialog..."
+    Expand-Archive -Path $nativeFileDialogTempZipPath -DestinationPath $nativeFileDialogExtractedPath -Force
+
+    # Copy the contents of the src directory to the destination directory
+    Write-Output "Copying nativefiledialog src files to destination..."
+    Copy-Item -Path "$nativeFileDialogExtractedPath\nativefiledialog-master\src\*" -Destination $nativeFileDialogDestinationPath -Recurse -Force
+
+    # Cleanup nativefiledialog
+    Write-Output "Cleaning up nativefiledialog..."
+    Remove-Item -Path $nativeFileDialogTempZipPath -Force
+    Remove-Item -Path $nativeFileDialogExtractedPath -Recurse -Force
 
     Write-Output "Engine setup completed."
     exit
 }
 
-    if ($help -or $h) {
-    Show-Help
-    exit
-}
 
 if ($compile) {
-	Write-Host "Cleaning bin Directories" -ForegroundColor Yellow
-	Remove-Item -Path bin\* -Recurse -Force
-	Remove-Item -Path bin -Recurse -Force
-	Remove-Item -Path tools\bin\* -Recurse -Force
-	Remove-Item -Path tools\bin -Recurse -Force
-	Write-Host "Cleaned bin Directories." -ForegroundColor Green
 	Write-Host "Making Directories" -ForegroundColor Yellow
 	mkdir bin\ -Force
 	mkdir tools\bin\ -Force
@@ -114,6 +149,12 @@ if ($compile) {
 	Write-Host copied level1.ini
 	Copy-Item -Path assets\data\txd\* -Destination tools\bin\data\txd -Recurse
 	Write-host copied txds
+	Copy-Item -Path tools\src\leveledit\edit.ico -Destination tools\bin\edit.ico
+	Write-host copied edit.ico
+	Copy-Item -Path tools\src\leveledit\edit.icns -Destination tools\bin\edit.icns
+	Write-Host copied edit.icns
+	Copy-Item -Path tools\src\leveledit\edit.png -Destination tools\bin\edit.png
+	Write-Host copied edit.png
 	Write-Host "Copied assets" -ForegroundColor Green
 	Write-Host "Copying DLLs" -ForegroundColor Yellow
 	Copy-Item -Path 3rdpty\bin\* -Destination bin\ -Recurse
@@ -129,7 +170,7 @@ if ($compile) {
             pyinstaller --onefile --windowed --distpath .\tools\bin\ --workpath .\tmp .\tools\src\leveledit\leveleditor.py --icon .\tools\src\leveledit\edit.ico
         }
     
-        Copy-Item -Path tools\src\leveledit\edit.ico -Destination tools\bin\edit.ico
+        
         Write-Host "Compiled Level Editor" -ForegroundColor Green
     }
     if ($viewer -or $tools -or $all) {
