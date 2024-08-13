@@ -18,13 +18,24 @@
    
 2. **Setup**
    ```bash
+   ./makeinit 
    ./make -setupengine
    ```
 
 
 2. **Compile the Project**
+<<<<<<< Updated upstream
+=======
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
    ```powershell
    .\make.ps1 -compile (-run) -game
+=======
+   1. Use the provided build script to compile the project. The script will handle necessary build configurations:
+
+   ```bash
+   .\make -compile (-run) -game
+>>>>>>> Stashed changes
    ```
 ## USAGE:
 
@@ -42,8 +53,8 @@ Levels are defined in `.ini` files located in the `data/levels` directory. The f
 
 To enable debugging features, you have to recomp:
 
-```powershell
-.\make.ps1 -compile -debug -game (-run)
+```bash
+.\make -compile -debug -game (-run)
 ```
 
 ## Known Issues
