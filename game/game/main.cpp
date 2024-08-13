@@ -134,7 +134,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
     // Load ASIs from the ./scripts/ folder
     if (!loadASIsFromScriptsFolder()) {
-        MessageBox(NULL, "Error loading ASIs", "ASI Load Error", MB_ICONERROR | MB_OK);
+        MessageBoxA(NULL, "Error loading ASIs", "ASI Load Error", MB_ICONERROR | MB_OK);
         return -1; // Exit if ASI loading fails
     }
 
@@ -147,25 +147,25 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     // Load textures
     sf::Texture backgroundTexture;
     if (!backgroundTexture.loadFromFile("./data/txd/back.png")) {
-        MessageBox(NULL, "Error loading background texture", "Texture Error", MB_ICONERROR | MB_OK);
+        MessageBoxA(NULL, "Error loading background texture", "Texture Error", MB_ICONERROR | MB_OK);
         return -1; // Exit if texture loading fails
     }
 
     sf::Texture playerTexture;
     if (!playerTexture.loadFromFile("./data/txd/user.png")) {
-        MessageBox(NULL, "Error loading player texture", "Texture Error", MB_ICONERROR | MB_OK);
+        MessageBoxA(NULL, "Error loading player texture", "Texture Error", MB_ICONERROR | MB_OK);
         return -1; // Exit if texture loading fails
     }
 
     sf::Texture floorTexture;
     if (!floorTexture.loadFromFile("./data/txd/base.png")) {
-        MessageBox(NULL, "Error loading floor texture", "Texture Error", MB_ICONERROR | MB_OK);
+        MessageBoxA(NULL, "Error loading floor texture", "Texture Error", MB_ICONERROR | MB_OK);
         return -1; // Exit if texture loading fails
     }
 
     sf::Texture platformTexture;
     if (!platformTexture.loadFromFile("./data/txd/platform.png")) {
-        MessageBox(NULL, "Error loading platform texture", "Texture Error", MB_ICONERROR | MB_OK);
+        MessageBoxA(NULL, "Error loading platform texture", "Texture Error", MB_ICONERROR | MB_OK);
         return -1; // Exit if texture loading fails
     }
 
@@ -197,7 +197,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     std::vector<Enemy> enemies;
     sf::Texture enemyTexture;
     if (!enemyTexture.loadFromFile("./data/txd/enemy.png")) {
-        MessageBox(NULL, "Error loading enemy texture", "Texture Error", MB_ICONERROR | MB_OK);
+        MessageBoxA(NULL, "Error loading enemy texture", "Texture Error", MB_ICONERROR | MB_OK);
         return -1; // Exit if texture loading fails
     }
 
