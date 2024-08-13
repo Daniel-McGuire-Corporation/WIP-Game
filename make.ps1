@@ -11,7 +11,7 @@ param (
     [switch]$h,
     [switch]$setupengine
 )
-Write-Host "Untiled-Game Make Script"
+Write-Host "Untited-Game Make Script"
 Write-Host "(c) 2024 Daniel McGuire"
 Write-Host ""
 $clPath = Get-Command cl.exe -ErrorAction SilentlyContinue
@@ -26,6 +26,7 @@ function Show-Help {
     Write-Host "Options:" -ForegroundColor Cyan
     Write-Host "  -run             Run the specified program(s)"
     Write-Host "  -compile         Compile specified targets"
+    Write-Host "  -setupengine     Download and setup the SFML engine"
     Write-Host ""
     Write-Host "Items to Compile or Run:"-ForegroundColor Cyan
     Write-Host "  -tools           Specify all tools"
@@ -39,107 +40,51 @@ function Show-Help {
     Write-Host "  -help, -h        Show this help message"
     Write-Host ""
     Write-Host "Usage:"
-    Write-Host "$ ./main <OPTION(S)> <ITEM(S)> [misc]"
+    Write-Host "$ .\main <OPTION(S)> <ITEM(S)> [misc]"
     Write-Host "Longest Command: (For an example)"
-    Write-Host "$ ./main -compile -run -editor -viewer -game -debug"
+    Write-Host "$ .\main -compile -run -editor -viewer -game -debug"
     Write-Host "What you will probably want:"
-    Write-Host "$ ./main -compile -run -game"
+    Write-Host "$ .\main -compile -run -game"
 }
 
 if ($setupengine) {
-    # Define URLs and paths relative to the script location
-    $aria2Url = "https://github.com/aria2/aria/releases/download/release-1.37.0/aria2-1.37.0-win-32bit-build1.zip"
-    $aria2ZipPath = "./tmp/download/aria2.zip"
-    $aria2ExtractPath = "./tmp/7zr/aria2"
-    $aria2FinalPath = "./tools/aria2/bin"
-    $aria2ExePath = "$aria2FinalPath/aria2c.exe"
+    # Define paths
+    $sfmlZipUrl = "https://www.sfml-dev.org/files/SFML-2.6.1-windows-vc17-32-bit.zip"
+    $tempZipPath = "$env:TEMP\SFML-2.6.1-windows-vc17-32-bit.zip"
+    $extractedPath = "$env:TEMP\SFML-2.6.1"
+    $destinationPath = ".\3rdpty"
 
-    $sevenZipUrl = "https://7-zip.org/a/7zr.exe"
-    $sevenZipPath = "./tmp/download/7zr.exe"
-    $sevenZipFinalPath = "./tools/7z/bin/7zr.exe"
+    # Download SFML zip file
+    Write-Output "Downloading Engine..."
+    Invoke-WebRequest -Uri $sfmlZipUrl -OutFile $tempZipPath
 
-    $sfmlUrl = "https://www.sfml-dev.org/files/SFML-2.6.1-windows-vc17-32-bit.zip"
-    $sfmlZipPath = "./tmp/download/sfml.zip"
-    $sfmlExtractPath = "./tmp/7zr/sfml"
-    $sfmlFinalPath = "./3rdpty/SFML-2.6.1"
+    # Extract the zip file
+    Invoke-WebRequest -Uri $sfmlZipUrl -OutFile $tempZipPath
 
-    # Ensure necessary directories exist
-    $downloadDir = "./tmp/download"
-    if (-not (Test-Path $downloadDir)) {
-        New-Item -ItemType Directory -Path $downloadDir -Force
+    # Extract the zip file
+    Write-Output "Extracting Engine..."
+    Expand-Archive -Path $tempZipPath -DestinationPath $extractedPath -Force
+
+    # Ensure the destination directory exists
+    if (-not (Test-Path $destinationPath)) {
+        Write-Output "Creating destination directory..."
+        New-Item -ItemType Directory -Path $destinationPath | Out-Null
     }
 
-    $extractionDir = "./tmp/7zr"
-    if (-not (Test-Path $extractionDir)) {
-        New-Item -ItemType Directory -Path $extractionDir -Force
-    }
+    # Copy the contents to the destination directory
+    Write-Output "Copying files to destination..."
+    Copy-Item -Path "$extractedPath\SFML-2.6.1\*" -Destination $destinationPath -Recurse -Force
 
-    if (-not (Test-Path $aria2FinalPath)) {
-        New-Item -ItemType Directory -Path $aria2FinalPath -Force
-    }
-    if (-not (Test-Path (Split-Path $sevenZipFinalPath))) {
-        New-Item -ItemType Directory -Path (Split-Path $sevenZipFinalPath) -Force
-    }
-    if (-not (Test-Path (Split-Path $sfmlFinalPath))) {
-        New-Item -ItemType Directory -Path (Split-Path $sfmlFinalPath) -Force
-    }
+    # Cleanup
+    Write-Output "Cleaning up..."
+    Remove-Item -Path $tempZipPath -Force
+    Remove-Item -Path $extractedPath -Recurse -Force
 
-    # Download aria2
-    Invoke-WebRequest -Uri $aria2Url -OutFile $aria2ZipPath
-
-    # Download 7zr
-    Invoke-WebRequest -Uri $sevenZipUrl -OutFile $sevenZipPath
-
-    # Move 7zr to its final destination
-    Move-Item $sevenZipPath $sevenZipFinalPath
-
-    # Extract aria2 using 7zr
-    Start-Process -FilePath $sevenZipFinalPath -ArgumentList "x", $aria2ZipPath, "-o$aria2ExtractPath" -Wait
-
-    # Move extracted aria2 files to final destination
-    Move-Item "$aria2ExtractPath/*" $aria2FinalPath -Force
-
-    # Clean up temporary aria2 directory and zip
-    Remove-Item $aria2ExtractPath -Recurse -Force
-    Remove-Item $aria2ZipPath
-
-    # Clone the repository if not already cloned
-    if (-not (Test-Path "./WIP-Game")) {
-        git clone "https://github.com/Daniel-McGuire-Corporation/WIP-Game" "./WIP-Game"
-    }
-
-    # Change the working directory to the cloned repository
-    Set-Location "./WIP-Game"
-
-    # Move tools from ../tools/ to ./tools/ in the cloned repository
-    if (-not (Test-Path "./tools")) {
-        New-Item -ItemType Directory -Path "./tools" -Force
-    }
-    Move-Item -Path "../tools/*" -Destination "./tools/" -Force
-
-    # Download SFML using aria2
-    Start-Process -FilePath $aria2ExePath -ArgumentList $sfmlUrl, "-d ./tmp/download -o sfml.zip" -Wait
-
-    # Extract SFML to a temporary directory using 7zr
-    Start-Process -FilePath $sevenZipFinalPath -ArgumentList "x", $sfmlZipPath, "-o$sfmlExtractPath" -Wait
-
-    # Clean up the SFML zip file
-    Remove-Item $sfmlZipPath
-
-    # Move extracted SFML directory to the final location
-    Move-Item "$sfmlExtractPath/SFML-2.6.1" $sfmlFinalPath -Force
-
-    # Clean up temporary SFML extraction directory
-    Remove-Item $sfmlExtractPath -Recurse -Force
-
-    # Prompt the user to compile and run the full game
-    Write-Host "Setup complete! Now you can compile and run the full game by executing the following command:"
-    Write-Host "./make -compile -run -fullgame"
+    Write-Output "Engine setup completed."
     exit
 }
 
-
-if ($help -or $h) {
+    if ($help -or $h) {
     Show-Help
     exit
 }
