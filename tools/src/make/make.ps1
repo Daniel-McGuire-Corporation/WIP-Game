@@ -13,10 +13,10 @@ param (
 	[switch]$clean
 )
 
-Start cmd /c taskkill /im game.exe /F 
-Start cmd /c taskkill /im game-debug.exe /f 
-cmd /c taskkill /im leveleditor.exe /f 
-cmd /c taskkill /im levelviewer.exe /f 
+Start-Process cmd /c taskkill /im game.exe /F 
+Start-Process cmd /c taskkill /im game-debug.exe /f 
+Start-Process cmd /c taskkill /im leveleditor.exe /f 
+Start-Process cmd /c taskkill /im levelviewer.exe /f 
 if ($clean) {
 	Write-Host "Cleaning Directories" -ForegroundColor Yellow
 	Remove-Item -Path bin\* -Recurse -Force
@@ -43,14 +43,6 @@ if ($null -eq $clPath) {
     Write-Host "cl.exe not found in PATH."
     Write-Host "Please start this script from the Visual Studio Developer PowerShell."
     exit
-}
-
-function Download-FileWithProgress {
-    param (
-        [string]$url,
-        [string]$destinationPath
-    )
-	Invoke-WebRequest -Uri $url -OutFile $destinationPath
 }
 
 if ($help -or $h) {
@@ -88,25 +80,26 @@ if ($setupengine) {
     $sfmlDestinationPath = ".\3rdpty"
 
     # Download SFML zip file
-    Write-Output "Downloading SFML..."
-    Download-FileWithProgress -url $sfmlZipUrl -destinationPath $sfmlTempZipPath
+    Write-Output "Downloading Engine..."
+    Write-Output "(It's not stuck)"
+    Invoke-WebRequest -Uri $sfmlZipUrl -OutFile $sfmlTempZipPath
 
     # Extract the zip file
-    Write-Output "Extracting SFML..."
+    Write-Output "Extracting Engine..."
     Expand-Archive -Path $sfmlTempZipPath -DestinationPath $sfmlExtractedPath -Force
 
     # Ensure the destination directory exists
     if (-not (Test-Path $sfmlDestinationPath)) {
-        Write-Output "Creating SFML destination directory..."
+        Write-Output "Creating destination directory..."
         New-Item -ItemType Directory -Path $sfmlDestinationPath | Out-Null
     }
 
     # Copy the contents to the destination directory
-    Write-Output "Copying SFML files to destination..."
+    Write-Output "Copying files to destination..."
     Copy-Item -Path "$sfmlExtractedPath\SFML-2.6.1\*" -Destination $sfmlDestinationPath -Recurse -Force
 
     # Cleanup SFML
-    Write-Output "Cleaning up SFML..."
+    Write-Output "Cleaning up..."
     Remove-Item -Path $sfmlTempZipPath -Force
     Remove-Item -Path $sfmlExtractedPath -Recurse -Force
 	clear-host
@@ -117,19 +110,20 @@ if ($setupengine) {
     $nativeFileDialogDestinationPath = ".\3rdpty"
 
     # Download nativefiledialog zip file
-    Write-Output "Downloading nativefiledialog..."
-    Download-FileWithProgress -url $nativeFileDialogZipUrl -destinationPath $nativeFileDialogTempZipPath
+    Write-Output "Downloading other resources..."
+    Write-Output "(It's not stuck)"
+    Invoke-WebRequest -Uri $nativeFileDialogZipUrl -OutFile $nativeFileDialogTempZipPath
 
     # Extract the zip file
-    Write-Output "Extracting nativefiledialog..."
+    Write-Output "Extracting..."
     Expand-Archive -Path $nativeFileDialogTempZipPath -DestinationPath $nativeFileDialogExtractedPath -Force
 
     # Copy the contents of the src directory to the destination directory
-    Write-Output "Copying nativefiledialog src files to destination..."
+    Write-Output "Copying files to destination..."
     Copy-Item -Path "$nativeFileDialogExtractedPath\nativefiledialog-master\src\*" -Destination $nativeFileDialogDestinationPath -Recurse -Force
 
     # Cleanup nativefiledialog
-    Write-Output "Cleaning up nativefiledialog..."
+    Write-Output "Cleaning up..."
     Remove-Item -Path $nativeFileDialogTempZipPath -Force
     Remove-Item -Path $nativeFileDialogExtractedPath -Recurse -Force
     Remove-Item -Path .\makeinit.ps1 -Recurse -Force
@@ -191,7 +185,7 @@ if ($compile) {
         Write-Host "Compiling game..." -ForegroundColor Yellow
         rc /fo game_resources.res .\game\ico.rc
         if ($debug) {
-            cl /EHsc /std:c++17 /MP /I".\3rdpty\include" /DDEBUG_BUILD .\game\game\main.cpp .\game\vari.cpp .\game\debug\debug.cpp .\game\ai\enemie.cpp game_resources.res /link /LIBPATH:".\3rdpty\lib" User32.lib sfml-graphics.lib sfml-window.lib sfml-system.lib /MACHINE:X86 /OUT:".\bin\game-debug.exe"
+            cl /EHsc /std:c++17 /MP /I".\3rdpty\include" /DDEBUG_BUILD .\game\game\main.cpp .\game\vari.cpp .\game\debug\debug.cpp .\game\ai\enemy.cpp game_resources.res /link /LIBPATH:".\3rdpty\lib" User32.lib sfml-graphics.lib sfml-window.lib sfml-system.lib /MACHINE:X86 /OUT:".\bin\game-debug.exe"
         } else {
             cl /EHsc /std:c++17 /MP /I".\3rdpty\include" .\game\game\main.cpp .\game\vari.cpp .\game\ai\enemie.cpp game_resources.res /link /LIBPATH:".\3rdpty\lib" User32.lib sfml-graphics.lib sfml-window.lib sfml-system.lib /MACHINE:X86 /OUT:".\bin\game.exe"
         }
