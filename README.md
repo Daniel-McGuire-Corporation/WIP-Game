@@ -2,8 +2,8 @@
 # Untitled Game
 
 ## Build-Prerequisites
-- Windows 10 x64 or later
-- Python 3.6 or later (and PIP)
+- [Windows 10 x64](https://www.microsoft.com/software-download/windows10) or [later](https://www.microsoft.com/en-us/software-download/windows11)
+- [Python](https://www.python.org/downloads/windows/) 3.6 or later (and PIP)
 - [Visual Studio 17 (2022) Build Tools (or VS Studio)](https://aka.ms/vs/17/release/vs_BuildTools.exe) 
 
 
