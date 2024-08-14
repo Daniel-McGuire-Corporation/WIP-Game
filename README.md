@@ -1,8 +1,9 @@
 
 # Untitled Game
 
-## Prerequisites
+## Build-Prerequisites
 - Windows 10 x64 or later
+- Python 3.10 or later (and PIP)
 - [Visual Studio 17 Build Tools (or VS Studio)](https://aka.ms/vs/17/release/vs_BuildTools.exe) 
 
 
