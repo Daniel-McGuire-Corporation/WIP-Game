@@ -38,3 +38,6 @@
 game_resources.res
 leveleditor.spec
 levelview_resources.res
+*.dll
+*.res
+*.spec
