@@ -5,7 +5,7 @@ cd $PSScriptRoot
 if (Test-Path ".\tools\bin") {
     # Set the PATH environment variable
     $env:PATH = "$($PSScriptRoot)\tools\bin;$env:PATH"
-    Write-Output "Path updated: $env:PATH"
+    Write-Output "Path updated"
 } else {
     Write-Output "Directory '.\tools\bin' does not exist."
 }
