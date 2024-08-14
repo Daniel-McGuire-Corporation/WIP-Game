@@ -3,19 +3,17 @@
 #include <fstream>
 #include <vector>
 #include <cstdlib>
-#include <string>
 #include <sstream>
 #include <thread>
 #include <chrono>
+#include <string>
 #include <windows.h> 
 #include <filesystem>
 #include "../ai/enemy.hpp" 
 #include "../vari.hpp"
 #include "game.hpp"
-#ifdef DEBUG_BUILD
+#include <shellapi.h>
 #include "../debug/debug.hpp"
-#endif
-
 
 
 // Variables
@@ -107,7 +105,7 @@ void updateCamera(sf::RenderWindow& window, sf::RectangleShape& player) {
     window.setView(view);
 }
 
-bool loadASIsFromScriptsFolder() {
+bool asiLoader() {
     std::string folderPath = "./scripts/";
     for (const auto& entry : fs::directory_iterator(folderPath)) {
         if (entry.path().extension() == ".asi") {
@@ -123,6 +121,7 @@ bool loadASIsFromScriptsFolder() {
     return true;
 }
 
+// Function to show a notification
 
 #ifdef DEBUG_BUILD
 int main() {
@@ -132,9 +131,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     std::cout << APP_NAME << "Debug Prompt (C++ 17)" << std::endl;
 
     // Load ASIs from the ./scripts/ folder
-    if (!loadASIsFromScriptsFolder()) {
-        std::cerr << "ASI ERROR" << std::endl;
+    if (!asiLoader()) {
+        std::cerr << "ASI Loader experienced an error" << std::endl;
         MessageBoxA(NULL, "Error loading ASIs", "ASI Load Error", MB_ICONERROR | MB_OK);
+
         return -1; // Exit if ASI loading fails
     }
 
@@ -147,7 +147,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     // Load textures
     sf::Texture backgroundTexture;
     if (!backgroundTexture.loadFromFile("./data/txd/back.png")) {
-        std::cerr << "Error loading background texture" << std::endl;
+        std::cerr << "Error loading background texture" << std::endl;   
         MessageBoxA(NULL, "Error loading background texture", "Texture Error", MB_ICONERROR | MB_OK);
         return -1; // Exit if texture loading fails
     }
@@ -194,8 +194,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     #endif
 
     // Wait for 2 seconds before dropping the player
-    std::this_thread::sleep_for(std::chrono::seconds(2));
-
+    #ifdef DEBUG_BUILD
+    std::this_thread::sleep_for(std::chrono::seconds(10));
+    #endif
     float velocityY = 0.0f; // Initialize velocityY
     bool isJumping = false; // Initialize isJumping
     std::vector<Enemy> enemies;
@@ -240,9 +241,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
             // Check if the player has fallen below the death height
             if (player.getPosition().y > DEATH_HEIGHT) {
-                std::cout << "Player fell below camera." << std::endl;
-                MessageBoxA(NULL, "Player fell below camera.", "Boundary issue", MB_ICONERROR | MB_OK);
-                return -1;
+                std::cout << "Player fell below cutoff." << std::endl;
+                MessageBoxA(NULL, "You walked off the edge!", "You Died!", MB_ICONERROR | MB_OK);
             }
         }
 
