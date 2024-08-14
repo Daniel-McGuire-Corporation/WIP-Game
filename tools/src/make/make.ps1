@@ -21,8 +21,6 @@ if ($clean) {
 	Write-Host "Cleaning Directories" -ForegroundColor Yellow
 	Remove-Item -Path bin\* -Recurse -Force
 	Remove-Item -Path bin -Recurse -Force
-	Remove-Item -Path tools\bin\* -Recurse -Force
-	Remove-Item -Path tools\bin -Recurse -Force
 	Remove-Item -Path tmp\* -Recurse -Force
 	Remove-Item -Path tmp -Recurse -Force
 	Remove-Item -Path *.obj -Recurse -Force
