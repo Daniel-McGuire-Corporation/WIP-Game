@@ -8,7 +8,7 @@
 
 
 
-## Building the Project
+## Building the Project (USING Visual Studio Powershell)
 
 1. **Clone the Repository**
 
@@ -17,7 +17,7 @@
    cd WIP-Game
    ```
    
-2. **Setup**
+3. **Setup**
    ```bash
    ./setenv
    makeinit 
