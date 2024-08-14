@@ -19,8 +19,9 @@
    
 2. **Setup**
    ```bash
-   ./makeinit 
-   ./make -setupengine
+   ./setenv
+   makeinit 
+   make -setupengine
    ```
 
 
@@ -28,7 +29,7 @@
    1. Use the provided build script to compile the project. The script will handle necessary build configurations:
 
    ```bash
-   .\make -compile (-run) -game
+   make -compile (-run) -game
    ```
 ## USAGE:
 
@@ -47,7 +48,7 @@ Levels are defined in `.ini` files located in the `data/levels` directory. The f
 To enable debugging features, you have to recomp:
 
 ```bash
-.\make -compile -debug -game (-run)
+make -compile -debug -game (-run)
 ```
 
 ## Known Issues
