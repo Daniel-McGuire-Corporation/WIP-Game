@@ -9,15 +9,14 @@
 #include <chrono>
 #include <windows.h> 
 #include <filesystem>
-#include "../ai/enemie.hpp" 
+#include "../ai/enemy.hpp" 
 #include "../vari.hpp"
-
-// Conditional inclusion of debug functionalities
+#include "game.hpp"
 #ifdef DEBUG_BUILD
 #include "../debug/debug.hpp"
 #endif
 
-#include "game.hpp"
+
 
 // Variables
 const int TILE_SIZE = 40;

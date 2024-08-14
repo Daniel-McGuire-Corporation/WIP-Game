@@ -10,6 +10,7 @@
 #include <map>
 #include <algorithm>
 #include "../vari.hpp"
+#include "../ai/enemy.hpp"
 
 
 sf::RectangleShape player(sf::Vector2f(50.0f, 50.0f));
