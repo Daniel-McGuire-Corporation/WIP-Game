@@ -19,8 +19,8 @@
    
 3. **Setup**
    ```bash
+   ./makeinit
    ./setenv
-   makeinit 
    make -setupengine
    ```
 
