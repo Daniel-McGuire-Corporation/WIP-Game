@@ -1,0 +1,1 @@
+$env:PATH = ".\tools\bin;$env:PATH"
