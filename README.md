@@ -46,7 +46,7 @@ Levels are defined in `.ini` files located in the `data/levels` directory. The f
 To enable debugging features, you have to recomp:
 
 ```bash
-make -compile -debug -game (-run)
+make -compile (-run) -game -debug
 ```
 
 ## Known Issues
