@@ -13,8 +13,8 @@ param (
 	[switch]$clean
 )
 
-cmd /c taskkill /im game.exe /F 
-cmd /c taskkill /im game-debug.exe /f 
+Start cmd /c taskkill /im game.exe /F 
+Start cmd /c taskkill /im game-debug.exe /f 
 cmd /c taskkill /im leveleditor.exe /f 
 cmd /c taskkill /im levelviewer.exe /f 
 if ($clean) {
@@ -50,77 +50,8 @@ function Download-FileWithProgress {
         [string]$url,
         [string]$destinationPath
     )
-
-    $request = [System.Net.HttpWebRequest]::Create($url)
-    $request.Method = "HEAD"
-    
-    try {
-        $response = $request.GetResponse()
-        $contentLength = $response.Headers["Content-Length"]
-        $response.Close()
-    } catch {
-        Write-Error "Failed to get file size from $url. $_"
-        return
-    }
-
-    if ([string]::IsNullOrEmpty($contentLength)) {
-		Invoke-WebRequest -Uri $url -OutFile $destinationPath
-    }
-
-    $request = [System.Net.HttpWebRequest]::Create($url)
-    $request.Method = "GET"
-    
-    try {
-        $response = $request.GetResponse()
-        $responseStream = $response.GetResponseStream()
-        $fileStream = [System.IO.File]::Create($destinationPath)
-
-        $buffer = New-Object byte[] 8192
-        $totalBytesRead = 0
-        $bytesRead = 0
-
-        $retryCount = 0
-		$maxRetries = 3
-
-while (($bytesRead = $responseStream.Read($buffer, 0, $buffer.Length)) -gt 0) {
-    $fileStream.Write($buffer, 0, $bytesRead)
-    $totalBytesRead += $bytesRead
-
-    if ($contentLength -ne $null -and $contentLength -gt 0) {
-        $progress = [math]::Round(($totalBytesRead / [int64]$contentLength) * 100, 2)
-        
-        try {
-            Write-Progress -Activity "Downloading Package" -PercentComplete $progress -Status "Downloading..." -CurrentOperation "Progress: $progress%"
-            $retryCount = 0  # Reset retry count on success
-        } catch {
-            Write-Output "Write-Progress failed. Attempting retry $($retryCount + 1) of $maxRetries"
-            $retryCount++
-            if ($retryCount -ge $maxRetries) {
-                Write-Error "Write-Progress failed after $maxRetries attempts. Exiting..."
-                break
-            }
-        }
-    }
+	Invoke-WebRequest -Uri $url -OutFile $destinationPath
 }
-
-
-        $fileStream.Close()
-        $responseStream.Close()
-        Write-Output "Download completed."
-    } catch {
-        Write-Error "Failed to download file from $url. $_"
-    }
-}
-# Variable to handle cancellation
-$global:cancelDownload = $false
-
-# Register interrupt handling
-Register-EngineEvent PowerShell.Exiting -Action {
-    $global:cancelDownload = $true
-} | Out-Null
-
-
-
 
 if ($help -or $h) {
     Write-Host "Options:" -ForegroundColor Cyan
