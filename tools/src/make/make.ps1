@@ -2,6 +2,7 @@ param (
     [switch]$debug,
     [switch]$compile,
     [switch]$tools,
+    [switch]$tweaker,
     [switch]$editor,
     [switch]$viewer,
     [switch]$game,
@@ -52,6 +53,7 @@ if ($help -or $h) {
     Write-Host "Items to Compile or Run:"-ForegroundColor Cyan
     Write-Host "  -tools           Specify all tools"
     Write-Host "  -editor          Specify the level editor"
+    Write-Host "  -tweaker         Specify the level tweaker"
     Write-Host "  -viewer          Specify the level viewer"
     Write-Host "  -game            Specify the game"
     Write-Host "  -all             Specify everything"
@@ -160,17 +162,25 @@ if ($compile) {
 	Copy-Item -Path 3rdpty\bin\* -Destination tools\bin\ -Recurse
 	Write-Host "Copied DLLs" -ForegroundColor Green
     Clear-Host
-    if ($editor -or $tools -or $all) {
-        Write-Host "Compiling level editor..." -ForegroundColor Yellow
+    if ($tweaker -or $tools -or $all) {
+        Write-Host "Compiling level tweaker..." -ForegroundColor Yellow
         pip install pyinstaller
         if ($debug) {
-            pyinstaller --onefile --distpath .\tools\bin\ --workpath .\tmp .\tools\src\leveledit\leveleditor.py --icon .\tools\src\leveledit\edit.ico 
+            pyinstaller --onefile --distpath .\tools\bin\ --workpath .\tmp .\tools\src\leveltweaker\leveltweaker.py --icon .\tools\src\leveltweaker\edit.ico 
         } else {
-            pyinstaller --onefile --windowed --distpath .\tools\bin\ --workpath .\tmp .\tools\src\leveledit\leveleditor.py --icon .\tools\src\leveledit\edit.ico
+            pyinstaller --onefile --windowed --distpath .\tools\bin\ --workpath .\tmp .\tools\src\leveltweaker\leveltweaker.py --icon .\tools\src\leveltweaker\edit.ico
         }
-    
-        
-        Write-Host "Compiled Level Editor" -ForegroundColor Green
+        Write-Host "Compiled Level tweaker" -ForegroundColor Green
+    }
+    if ($editor -or $tools -or $all) {
+        Write-Host "Compiling level editor..." -ForegroundColor Yellow
+        rc /nologo /fo leveledit_resources.res .\tools\src\leveledit\ico.rc
+        if ($debug) {
+        cl /EHsc /nologo /std:c++17 /MP /I"./3rdpty/include" /DDEBUG_BUILD .\tools\src\leveledit\leveledit.cpp .\tools\src\leveledit\nfd_common.c .\tools\src\leveledit\nfd_win.cpp leveledit_resources.res /link /LIBPATH:"./3rdpty/lib" sfml-graphics.lib sfml-window.lib sfml-system.lib ole32.lib shell32.lib uuid.lib /MACHINE:X86 /SUBSYSTEM:CONSOLE /OUT:"./tools/bin/leveleditor.exe"
+        Write-Host "Compiled Level editor" -ForegroundColor Green 
+        } else {
+            cl /EHsc /nologo /std:c++17 /MP /I"./3rdpty/include" .\tools\src\leveledit\leveledit.cpp .\tools\src\leveledit\nfd_common.c .\tools\src\leveledit\nfd_win.cpp leveledit_resources.res /link /LIBPATH:"./3rdpty/lib" sfml-graphics.lib sfml-window.lib sfml-system.lib ole32.lib shell32.lib uuid.lib /MACHINE:X86 /SUBSYSTEM:WINDOWS /OUT:"./tools/bin/leveleditor.exe"
+        }
     }
     if ($viewer -or $tools -or $all) {
         Write-Host "Compiling level viewer..." -ForegroundColor Yellow
@@ -193,6 +203,10 @@ if ($compile) {
 if ($run) {
     Write-Host "Running the specified program(s)..." -ForegroundColor Yellow
 
+    if ($tweaker -or $tools -or $all) {
+        Write-Host "Running Level Tweaker..." -ForegroundColor Green
+        Start-Process -FilePath tools\bin\leveltweaker.exe -WorkingDirectory tools\bin
+    }
     if ($editor -or $tools -or $all) {
         Write-Host "Running Level Editor..." -ForegroundColor Green
         Start-Process -FilePath tools\bin\leveleditor.exe -WorkingDirectory tools\bin
