@@ -33,11 +33,7 @@ if ($clean) {
 	Remove-Item -Path *.res -Recurse -Force
 	Write-Host "Cleaned Directories." -ForegroundColor Green
 	Clear-Host
-	Write-Host "Untited-Game Make Script"
-	Write-Host "(c) 2024 Daniel McGuire"
-	Write-Host ""
 }
-clear-host
 Write-Host "Untited-Game Make Script"
 Write-Host "(c) 2024 Daniel McGuire"
 Write-Host ""
@@ -77,7 +73,6 @@ if ($help -or $h) {
 }
 
 if ($setupengine) {
-	clear-host
     # Define paths for SFML
     $sfmlZipUrl = "https://www.sfml-dev.org/files/SFML-2.6.1-windows-vc17-32-bit.zip"
     $sfmlTempZipPath = "$env:TEMP\SFML-2.6.1-windows-vc17-32-bit.zip"
@@ -166,7 +161,6 @@ if ($compile) {
 	Copy-Item -Path 3rdpty\bin\* -Destination bin\ -Recurse
 	Copy-Item -Path 3rdpty\bin\* -Destination tools\bin\ -Recurse
 	Write-Host "Copied DLLs" -ForegroundColor Green
-    Clear-Host
     if ($tweaker -or $tools -or $all) {
         Write-Host "Compiling level tweaker..." -ForegroundColor Yellow
         pip install pyinstaller
