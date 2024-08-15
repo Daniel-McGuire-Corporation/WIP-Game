@@ -243,6 +243,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
             if (player.getPosition().y > DEATH_HEIGHT) {
                 std::cout << "Player fell below cutoff." << std::endl;
                 MessageBoxA(NULL, "You walked off the edge!", "You Died!", MB_ICONERROR | MB_OK);
+                return -1;
             }
         }
 
