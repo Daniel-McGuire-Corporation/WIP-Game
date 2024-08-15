@@ -25,9 +25,9 @@
    ```
 
 
-2. **Compile the Project**
+2. **Compile the Project** [Learn Make Syntax](https://github.com/Daniel-McGuire-Corporation/WIP-Game/wiki/Make-Guide)
    ```bash
-   make -compile (-run) -game
+   make -compile (-run) -[game, tools, all]
    ```
 ## USAGE:
 
@@ -46,7 +46,7 @@ Levels are defined in `.ini` files located in the `data/levels` directory. The f
 To enable debugging features, you have to recomp:
 
 ```bash
-make -compile (-run) -game -debug
+make -compile (-run) -[game, tools, all] -debug
 ```
 
 ## Known Issues
