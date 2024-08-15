@@ -17,7 +17,7 @@
    cd WIP-Game
    ```
    
-3. **Setup**
+3. **Setup** (Does not require make, uses custom program)
    ```bash
    ./makeinit
    ./setenv
