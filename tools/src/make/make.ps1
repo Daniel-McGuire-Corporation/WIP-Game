@@ -21,7 +21,12 @@ Start-Process cmd /c taskkill /im levelviewer.exe /f
 if ($clean) {
 	Write-Host "Cleaning Directories" -ForegroundColor Yellow
 	Remove-Item -Path bin\* -Recurse -Force
-	Remove-Item -Path bin -Recurse -Force
+    Remove-Item -Path tools\bin\*.dll -Recurse -Force
+    Remove-Item -Path tools\bin\data\* -Recurse -Force
+    Remove-Item -Path tools\bin\data -Recurse -Force
+	Remove-Item -Path tools\bin\level*.exe -Recurse -Force
+    Remove-Item -Path tools\bin\edit.ico -Recurse -Force
+    Remove-Item -Path bin -Recurse -Force
 	Remove-Item -Path tmp\* -Recurse -Force
 	Remove-Item -Path tmp -Recurse -Force
 	Remove-Item -Path *.obj -Recurse -Force
