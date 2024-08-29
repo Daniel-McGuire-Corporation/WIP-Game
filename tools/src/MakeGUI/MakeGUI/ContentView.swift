@@ -11,18 +11,14 @@ struct ContentView: View {
 
     var body: some View {
         VStack(alignment: .leading) {
-            Text("untitledgame Build and Setup Program")
-                .font(.headline)
+            Text("untitled-game Make Command GUI (WIP)")
                 .padding(.bottom)
-
             HStack {
-                Toggle("Debug Mode", isOn: $debugMode)
+                Toggle("Debug", isOn: $debugMode)
                     .padding(.trailing)
-
-                Toggle("Clean", isOn: $clean)
+                
+                Toggle("Clean (Must be used alone!)", isOn: $clean)
             }
-            .padding(.bottom)
-
             Text("Targets:")
                 .font(.subheadline)
                 
@@ -42,16 +38,16 @@ struct ContentView: View {
             }
             .padding(.bottom)
 
-            Button("Run Command") {
-                runMakeCommand()
-            }
-            .background(Color.red)
-            .foregroundColor(.white)
-            .cornerRadius(5)
-            .frame(maxWidth: 208, maxHeight: 50) // Make button 50 less wide than the button width, DO NOT TOUCH 'maxHeight'!
-            .fixedSize()
-            .frame(height: 67)
-            .padding(.top)
+            //Button("Run Command") {
+            //    runMakeCommand()
+            //}
+            //.background(Color.blue)
+            //.foregroundColor(.white)
+            //.cornerRadius(5)
+            //.frame(maxWidth: 208, maxHeight: 50) // Make button 50 less wide than the button width, DO NOT TOUCH 'maxHeight'!
+            //.fixedSize()
+            //.frame(height: 67)
+            //.padding(.top)
 
             if showCommand {
                 Text("Command:")
@@ -73,13 +69,22 @@ struct ContentView: View {
                 }
                 .frame(maxHeight: 300) // Set the height of the output box
             } else {
-                TextField("Output", text: .constant(outputText))
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                Text("Command:")
+                    .font(.headline)
+                    .padding(.top)
+
+                TextEditor(text: .constant(generateCommand()))
+                    .frame(height: 15)
+                    .border(Color.clear)
                     .padding(.bottom)
+                
+                //TextField("Output", text: .constant(outputText))
+                //    .textFieldStyle(RoundedBorderTextFieldStyle())
+                //    .padding(.bottom)
             }
 
-            Toggle("Show Command", isOn: $showCommand)
-                .padding(.top)
+            //Toggle("Advanced", isOn: $showCommand)
+            //    .padding(.top)
         }
         .padding()
     }
@@ -105,7 +110,7 @@ struct ContentView: View {
             arguments.append(selectedTarget)
         }
 
-        let command = "../make"
+        let command = "../../make"
         let process = Process()
         process.executableURL = URL(fileURLWithPath: "/bin/bash")
         process.arguments = ["-c", "\(command) \(arguments.joined(separator: " "))"]
@@ -145,7 +150,7 @@ struct ContentView: View {
             return "../make -setupengine"
         }
 
-        var command = "../make"
+        var command = "$ ./make"
         if debugMode { command += " -debug" }
         if clean { command += " -clean" }
         if selectedTarget != "Select Target" && selectedTarget != "-setupengine" {
@@ -181,4 +186,5 @@ struct Checkbox: View {
 
 #Preview {
     ContentView()
+        .frame(width: 400, height: 245)
 }

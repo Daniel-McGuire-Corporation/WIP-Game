@@ -9,6 +9,7 @@ struct MakeGUIApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .frame(width: 400, height: 245)
                 .environmentObject(appEnvironment)
                 .onReceive(NotificationCenter.default.publisher(for: .showAboutWindowNotification)) { _ in
                     aboutWindowController.showAboutWindow(appEnvironment: appEnvironment)
@@ -26,7 +27,7 @@ class AboutWindowController: ObservableObject {
     func showAboutWindow(appEnvironment: AppEnvironment) {
         if aboutWindow == nil {
             let window = NSWindow(
-                contentRect: NSRect(x: 0, y: 0, width: 445, height: 645),
+                contentRect: NSRect(x: 0, y: 0, width: 420, height: 355),
                 styleMask: [.titled, .closable, .miniaturizable],
                 backing: .buffered,
                 defer: false

@@ -13,7 +13,8 @@ struct MenuCommands: Commands {
         }
         
         CommandMenu("Build") {
-            Button("Build All") {
+            Button ("Coming Soon!") {}
+            /*Button("Build All") {
                 // Implement the build all functionality
                 print("Build All clicked")
             }
@@ -27,7 +28,7 @@ struct MenuCommands: Commands {
                 // Implement the build tools functionality
                 print("Build Tools clicked")
             }
-            .keyboardShortcut("t", modifiers: [.command, .option])
+            .keyboardShortcut("t", modifiers: [.command, .option])*/
         }
     }
 }

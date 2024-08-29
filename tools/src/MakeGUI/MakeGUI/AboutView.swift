@@ -14,26 +14,26 @@ struct AboutView: View {
             
             Spacer()
             
-            Text("Alpha software may do fun things, including:")
+            Text("Alpha software may do fun things, including: (but not limited to)")
                 .font(.headline)
                 .padding(.top, 20)
             
             Text("1. Crashing. (Common)")
             Text("2. Not opening (Unlikely)")
-            Text("3. Other unpleasant things.")
-            
-            Spacer()
+            Text("2. Computer Explosion (ULTRA-RARE)")
             
             Text("Remember to REPORT ISSUES!")
                 .font(.headline)
-                .padding(.top, 20)
-            
-            Text("Part of UNTITLEDGAME by DMC")
-            Text("© 2024 Daniel McGuire Corporation")
                 .padding(.top, 5)
+            Spacer()
+            Text("Part of UNTITLEDGAME by DMC")
+                .padding(.top, 25)
+            Text("© 2024 Daniel McGuire Corporation")
+                
         }
     }
 }
 #Preview {
     AboutView()
+        .frame(width: 450, height: 325)
 }
