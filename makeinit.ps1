@@ -6,4 +6,4 @@ Clear-Host
 Write-Host Make has been initialized.
 Write-Host ""
 Write-Host "If you haven't yet, run"
-Write-Host "make -setupengine"
+Write-Host "./setenv;make -setupengine"

@@ -1,25 +1,11 @@
-#include <SFML/Graphics.hpp>
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <cstdlib>
-#include <sstream>
-#include <thread>
-#include <chrono>
-#include <string>
-#include <windows.h> 
-#include <filesystem>
-#include "../ai/enemy.hpp" 
-#include "../vari.hpp"
-#include "game.hpp"
-#include <shellapi.h>
-#include "../debug/debug.hpp"
-
-
+#include "def.hpp"
+#include "engine.hpp"
+#include "dmc.hpp"
 // Variables
 const int TILE_SIZE = 40;
 const float DEATH_HEIGHT = 600.0f;
 std::atomic<bool> running(true);
+float musicVolume = 30.0f;
 
 namespace fs = std::filesystem;
 
@@ -137,12 +123,30 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
         return -1; // Exit if ASI loading fails
     }
+     std::srand(static_cast<unsigned int>(std::time(nullptr)));
 
     #ifdef DEBUG_BUILD
     sf::RenderWindow window(sf::VideoMode(800, 600), "debug");
     #else
     sf::RenderWindow window(sf::VideoMode(800, 600), APP_NAME);
     #endif
+
+    sf::Music music1;
+    if (!music1.openFromFile("./data/music/in1.wav")) {
+        return EXIT_FAILURE;
+    }
+
+    sf::Music music2;
+    if (!music2.openFromFile("./data/music/in2.wav")) {
+        return EXIT_FAILURE;
+    }
+    music1.setVolume(musicVolume);
+    music2.setVolume(musicVolume);
+    std::vector<sf::Music*> musicFiles = {&music1, &music2};
+
+    sf::Clock clock;
+    sf::Time firstPlayTime = sf::seconds(35.0f); // Start playing 35 seconds after the game starts
+    sf::Time nextPlayTime;
 
     // Load textures
     sf::Texture backgroundTexture;
@@ -248,6 +252,39 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         }
 
         window.clear();
+        if (clock.getElapsedTime() >= firstPlayTime) {
+            if (!music1.getStatus() && !music2.getStatus()) { // No music is currently playing
+                // Pick a random music file
+                int randomIndex = std::rand() % musicFiles.size();
+                sf::Music* selectedMusic = musicFiles[randomIndex];
+
+                // Play selected music
+                selectedMusic->play();
+
+                // Set the volume in case it's changed
+                selectedMusic->setVolume(musicVolume);
+
+                // Set the next play time after a random interval (30 - 70 seconds)
+                nextPlayTime = clock.getElapsedTime() + sf::seconds(static_cast<float>(std::rand() % 41 + 30));
+            }
+        }
+
+        // Check if it's time to play the next track
+        if (clock.getElapsedTime() >= nextPlayTime && (music1.getStatus() == sf::Music::Stopped || music2.getStatus() == sf::Music::Stopped)) {
+            // Pick a random music file
+            int randomIndex = std::rand() % musicFiles.size();
+            sf::Music* selectedMusic = musicFiles[randomIndex];
+
+            // Play selected music
+            selectedMusic->play();
+
+            // Set the volume in case it's changed
+            selectedMusic->setVolume(musicVolume);
+
+            // Set the next play time after a random interval (30 - 70 seconds)
+            nextPlayTime = clock.getElapsedTime() + sf::seconds(static_cast<float>(std::rand() % 41 + 30));
+        }
+
 
         // Draw the background as tiles
         drawTiledBackground(window, backgroundTexture);
