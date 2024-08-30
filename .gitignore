@@ -926,3 +926,4 @@ $RECYCLE.BIN/
 # End of https://www.toptal.com/developers/gitignore/api/windows,macos,linux,vim,visualstudio,visualstudiocode,c++,csharp,swift,xcode,intellij
 /3rdpty
 /game/ai/.vscode
+*.zip

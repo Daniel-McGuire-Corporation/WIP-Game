@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1A22102C2C81601B009A1383 /* make.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A22102B2C81601B009A1383 /* make.swift */; };
 		1A6E96692C808F68005E61FC /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6E96682C808F68005E61FC /* AboutView.swift */; };
 		1A6E966A2C808F68005E61FC /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6E96682C808F68005E61FC /* AboutView.swift */; };
 		1A6E966B2C808F68005E61FC /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6E96682C808F68005E61FC /* AboutView.swift */; };
@@ -43,6 +44,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1A22102B2C81601B009A1383 /* make.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = make.swift; sourceTree = "<group>"; };
 		1A6E96682C808F68005E61FC /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
 		1A6E966C2C80949C005E61FC /* MenuBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBar.swift; sourceTree = "<group>"; };
 		1A6E96742C80CC5E005E61FC /* AS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AS.swift; sourceTree = "<group>"; };
@@ -57,6 +59,7 @@
 		1A80CE212C807E02005DF806 /* MakeGUIUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MakeGUIUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A80CE252C807E02005DF806 /* MakeGUIUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MakeGUIUITests.swift; sourceTree = "<group>"; };
 		1A80CE272C807E02005DF806 /* MakeGUIUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MakeGUIUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		1AA4F46F2C814EE500AEDE8D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,6 +110,7 @@
 		1A80CE082C807DFB005DF806 /* MakeGUI */ = {
 			isa = PBXGroup;
 			children = (
+				1AA4F46F2C814EE500AEDE8D /* Info.plist */,
 				1A6E96742C80CC5E005E61FC /* AS.swift */,
 				1A80CE092C807DFB005DF806 /* MakeGUIApp.swift */,
 				1A80CE0B2C807DFB005DF806 /* ContentView.swift */,
@@ -115,6 +119,7 @@
 				1A80CE0F2C807E01005DF806 /* Preview Content */,
 				1A6E96682C808F68005E61FC /* AboutView.swift */,
 				1A6E966C2C80949C005E61FC /* MenuBar.swift */,
+				1A22102B2C81601B009A1383 /* make.swift */,
 			);
 			path = MakeGUI;
 			sourceTree = "<group>";
@@ -279,6 +284,7 @@
 				1A80CE0A2C807DFB005DF806 /* MakeGUIApp.swift in Sources */,
 				1A6E96752C80CC5E005E61FC /* AS.swift in Sources */,
 				1A6E966D2C80949C005E61FC /* MenuBar.swift in Sources */,
+				1A22102C2C81601B009A1383 /* make.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -451,6 +457,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"MakeGUI/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MakeGUI/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -476,6 +483,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"MakeGUI/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MakeGUI/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

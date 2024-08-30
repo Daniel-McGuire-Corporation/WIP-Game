@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var debugMode = false
+    @State private var runMode = false
     @State private var clean = false
     @State private var selectedTarget: String = "Select Target"
     @State private var outputText: String = ""
@@ -10,19 +11,22 @@ struct ContentView: View {
     let buildTargets = ["-all", "-tools", "-game", "-editor", "-viewer", "-tweaker"]
 
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .center) {
             Text("untitled-game Make Command GUI (WIP)")
                 .padding(.bottom)
             HStack {
                 Toggle("Debug", isOn: $debugMode)
                     .padding(.trailing)
                 
+                Toggle("Run", isOn: $runMode)
+                    .padding(.trailing)
+                
                 Toggle("Clean (Must be used alone!)", isOn: $clean)
             }
-            Text("Targets:")
-                .font(.subheadline)
+            Text("Targets")
+                .font(.headline)
+                .padding(.top)
                 
-
             Menu {
                 ForEach(buildTargets, id: \.self) { target in
                     Button(target) {
@@ -38,19 +42,19 @@ struct ContentView: View {
             }
             .padding(.bottom)
 
-            //Button("Run Command") {
-            //    runMakeCommand()
-            //}
-            //.background(Color.blue)
-            //.foregroundColor(.white)
-            //.cornerRadius(5)
-            //.frame(maxWidth: 208, maxHeight: 50) // Make button 50 less wide than the button width, DO NOT TOUCH 'maxHeight'!
-            //.fixedSize()
-            //.frame(height: 67)
-            //.padding(.top)
+            Button("Run Command") {
+                runMakeCommand()
+            }
+            .background(Color.blue)
+            .foregroundColor(.white)
+            .cornerRadius(5)
+            .frame(maxWidth: 208, maxHeight: 50)
+            .fixedSize()
+            .frame(height: 67)
+            .padding(.top)
 
             if showCommand {
-                Text("Command:")
+                Text("Command")
                     .font(.headline)
                     .padding(.top)
 
@@ -59,7 +63,7 @@ struct ContentView: View {
                     .border(Color.gray)
                     .padding(.bottom)
 
-                Text("Output:")
+                Text("Output")
                     .font(.headline)
                     .padding(.top)
 
@@ -67,26 +71,27 @@ struct ContentView: View {
                     Text(outputText)
                         .padding()
                 }
-                .frame(maxHeight: 300) // Set the height of the output box
+                .frame(maxHeight: 300)
             } else {
-                Text("Command:")
+                Text("Command")
                     .font(.headline)
                     .padding(.top)
 
                 TextEditor(text: .constant(generateCommand()))
-                    .frame(height: 15)
+                    .frame(height: 20)
                     .border(Color.clear)
+                    .cornerRadius(4)
                     .padding(.bottom)
-                
-                //TextField("Output", text: .constant(outputText))
-                //    .textFieldStyle(RoundedBorderTextFieldStyle())
-                //    .padding(.bottom)
             }
-
-            //Toggle("Advanced", isOn: $showCommand)
-            //    .padding(.top)
         }
+        TextField("Output", text: .constant(outputText))
+            .textFieldStyle(RoundedBorderTextFieldStyle())
+            .padding(.bottom)
         .padding()
+        .onAppear(perform: checkAndSetupMake)
+        Toggle("Advanced", isOn: $showCommand)
+            .padding(.top)
+        }
     }
 
     func runMakeCommand() {
@@ -104,13 +109,17 @@ struct ContentView: View {
         if debugMode {
             arguments.append("-debug")
         }
+        
+        if runMode {
+            arguments.append("-run")
+        }
 
         if selectedTarget != "Select Target" && selectedTarget != "-setupengine" {
             arguments.append("-compile")
             arguments.append(selectedTarget)
         }
 
-        let command = "../../make"
+        let command = Bundle.main.path(forResource: "make", ofType: "") ?? ""
         let process = Process()
         process.executableURL = URL(fileURLWithPath: "/bin/bash")
         process.arguments = ["-c", "\(command) \(arguments.joined(separator: " "))"]
@@ -128,7 +137,7 @@ struct ContentView: View {
     }
 
     private func setupEngine() {
-        let command = "../make -setupengine"
+        let command = "../../make -setupengine"
         let process = Process()
         process.executableURL = URL(fileURLWithPath: "/bin/bash")
         process.arguments = ["-c", command]
@@ -153,6 +162,7 @@ struct ContentView: View {
         var command = "$ ./make"
         if debugMode { command += " -debug" }
         if clean { command += " -clean" }
+        if runMode { command += " -run"}
         if selectedTarget != "Select Target" && selectedTarget != "-setupengine" {
             command += " -compile \(selectedTarget)"
         }
