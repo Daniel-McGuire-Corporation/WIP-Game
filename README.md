@@ -66,5 +66,6 @@ For questions or issues, please contact [Daniel McGuire](mailto:danielmcguire23@
 
 - SFML: A great library for multimedia applications.
 - QT: A great GUI library
+- Apple: swift (took me 2 days to learn the basics lol)
 - DMC MVPs
 
