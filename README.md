@@ -8,8 +8,8 @@
 ## Build-Prerequisites
 
 > [!NOTE]
-> 
-> Linux Development hasn't started yet
+>
+> Linux Development hasn't started yet. macOS Version needs help.
 
 | OS: | Windows | Linux | macOS |
 |-----|---------|-------|-------|
