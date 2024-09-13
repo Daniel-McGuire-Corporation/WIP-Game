@@ -928,3 +928,9 @@ $RECYCLE.BIN/
 /game/ai/.vscode
 *.zip
 make
+WIP/chat/.vscode/settings.json
+WIP/chat/.vscode/settings.json
+WIP/chat/linux_client
+WIP/chat/linux_server
+WIP/newdebug/.vscode/settings.json
+/WIP/test
