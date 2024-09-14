@@ -8,16 +8,16 @@
 ## Build-Prerequisites
 
 > [!NOTE]
-> 
-> Linux Development hasn't started yet
+>
+> Linux Development hasn't started yet. macOS Version needs help.
 
 | OS: | Windows | Linux | macOS |
 |-----|---------|-------|-------|
-| Minimum: | Windows 10 | Ubuntu 22.04 | macOS Monterey |
-| Python: | [Download](https://www.python.org/downloads/windows/) | [Download](https://www.python.org/downloads/linux/) | [Download](https://www.python.org/downloads/mac-osx/) |
-| IDE: | [Visual Studio 2022 Build Tools](https://aka.ms/vs/17/release/vs_BuildTools.exe) | [VSCode](https://code.visualstudio.com/docs/cpp/config-linux) | [Xcode](https://developer.apple.com/xcode/) |
-| PowerShell: | [Download](https://github.com/PowerShell/PowerShell/releases/download/v7.4.5/powershell_7.4.5-1.deb_amd64.deb) | | |
-| Misc: | | [QT](https://www.qt.io/download-dev) | [HomeBrew](brew.sh) | 
+| Minimum: | Windows 10 | Ubuntu 22.04 | macOS Monterey (Intel) |
+| Python: | [3.12.6](https://www.python.org/ftp/python/3.12.5/python-3.12.5-amd64.exe) | sudo apt install python | [3.12.6](https://www.python.org/ftp/python/3.12.6/python-3.12.6-macos11.pkg) |
+| IDE: | [Visual Studio 2022 Build Tools](https://aka.ms/vs/17/release/vs_BuildTools.exe) | sudo snap install --classic code | [Xcode](https://developer.apple.com/xcode/) |
+| PowerShell: | [7.4.5](https://github.com/PowerShell/PowerShell/releases/download/v7.4.5/PowerShell-7.4.5-win-x64.msi) | sudo snap install powershell | [7.4.5](https://github.com/PowerShell/PowerShell/releases/download/v7.4.5/powershell-lts-7.4.5-osx-x64.pkg) |
+| Misc: | [MSYS2](https://github.com/msys2/msys2-installer/releases/download/2024-07-27/msys2-x86_64-20240727.exe) (Optional) | [QT](https://www.qt.io/download-dev) | [HomeBrew](brew.sh) | 
 
 
 ## Building the Project on macOS
