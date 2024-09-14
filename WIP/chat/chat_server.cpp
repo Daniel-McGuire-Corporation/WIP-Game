@@ -1,4 +1,3 @@
-// chat_server.cpp
 #include <iostream>
 #include <string>
 #include <vector>
@@ -21,6 +20,8 @@
 #include <cstring>
 #define closesocket close
 #endif
+
+#include "StringCensor.h"  // Include the censoring functionality
 
 std::vector<int> clients;
 std::mutex clients_mutex;
@@ -45,7 +46,7 @@ void handle_client(int client_socket) {
 
     // Prompt for username
     std::string username;
-    std::string welcome_msg = "Username: ";
+    std::string welcome_msg = "Username: " + username + "\n";
     send(client_socket, welcome_msg.c_str(), welcome_msg.length(), 0);
 
     bytes_received = recv(client_socket, buffer, sizeof(buffer) - 1, 0);
@@ -74,18 +75,22 @@ void handle_client(int client_socket) {
             buffer[bytes_received] = '\0';
             std::string message = client_usernames[client_socket] + ": " + buffer;
 
-            std::cout << message << std::endl;
+            // Censor the message before broadcasting
+            std::string censored_message = censor::string(message);
 
-            // Add message to chat history
-            chat_history.push_back(message);
+            std::cout << censored_message << std::endl;
+
+            // Add censored message to chat history
+            chat_history.push_back(censored_message);
             if (chat_history.size() > MAX_HISTORY_SIZE) {
                 chat_history.pop_front(); // Remove oldest message
             }
 
-            // Broadcast the message to all clients
-            broadcast_message(message, client_socket);
+            // Broadcast the censored message to all clients
+            broadcast_message(censored_message, client_socket);
         } else {
-            std::cout << "Client disconnected or error occurred for socket: " << client_socket << std::endl;
+            std::cout << "Client " << client_usernames[client_socket];
+            std::cout << "@socket." << client_socket << " lost connection.\n";
             break;
         }
     }
@@ -111,6 +116,9 @@ int main() {
         return 1;
     }
 #endif
+
+    // Initialize the censoring system with the wordlist
+    censor::init("./wordlist.txt");
 
     int server_socket = socket(AF_INET, SOCK_STREAM, 0);
     if (server_socket == -1) {

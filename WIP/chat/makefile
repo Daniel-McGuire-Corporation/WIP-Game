@@ -5,29 +5,33 @@ WIN_CXX = cl
 WIN_FLAGS = /EHsc
 WIN_LIBS = ws2_32.lib
 
+# Source files
+SERVER_SOURCES = chat_server.cpp stringcensor.cpp
+CLIENT_SOURCES = chat_client.cpp
+
 # Targets
 all: linux_server linux_client mac_client mac_server win_server win_client
 
 # Linux
-linux_server: chat_server.cpp
-	$(CXX) $(CXXFLAGS) -o linux_server chat_server.cpp
+linux_server: $(SERVER_SOURCES)
+	$(CXX) $(CXXFLAGS) -o linux_server $(SERVER_SOURCES)
 
-linux_client: chat_client.cpp
-	$(CXX) $(CXXFLAGS) -o linux_client chat_client.cpp
+linux_client: $(CLIENT_SOURCES)
+	$(CXX) $(CXXFLAGS) -o linux_client $(CLIENT_SOURCES)
 
 # macOS
-mac_server: chat_server.cpp
-	$(CXX) $(CXXFLAGS) -o mac_server chat_server.cpp
+mac_server: $(SERVER_SOURCES)
+	$(CXX) $(CXXFLAGS) -o mac_server $(SERVER_SOURCES)
 
-mac_client: chat_client.cpp
-	$(CXX) $(CXXFLAGS) -o mac_client chat_client.cpp
+mac_client: $(CLIENT_SOURCES)
+	$(CXX) $(CXXFLAGS) -o mac_client $(CLIENT_SOURCES)
 
 # Windows
-win_server: chat_server.cpp
-	$(WIN_CXX) $(WIN_FLAGS) chat_server.cpp $(WIN_LIBS) /Fe:win_server.exe
+win_server: chat_server.cpp stringcensor.cpp
+	$(WIN_CXX) $(WIN_FLAGS) chat_server.cpp stringcensor.cpp $(WIN_LIBS) /Fe:win_server.exe
 
-win_client: chat_client.cpp
-	$(WIN_CXX) $(WIN_FLAGS) chat_client.cpp $(WIN_LIBS) /Fe:win_client.exe
+win_client: $(CLIENT_SOURCES)
+	$(WIN_CXX) $(WIN_FLAGS) $(CLIENT_SOURCES) $(WIN_LIBS) /Fe:win_client.exe
 
 # Clean
 clean:

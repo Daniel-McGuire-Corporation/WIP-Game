@@ -70,7 +70,7 @@ class ChatClient:
     def send_message(self, event=None):
         message = self.message_entry.get()
         if message:
-            full_message = f"{self.username}: {message}"
+            full_message = f"{message}"
             try:
                 self.client_socket.sendall(full_message.encode('utf-8'))
                 self.message_entry.delete(0, tk.END)
