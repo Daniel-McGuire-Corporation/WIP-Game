@@ -43,7 +43,7 @@ void receive_messages(int client_socket, std::string& chat_history) {
     int bytes_received;
 
     while (true) {
-        bytes_received = recv(client_socket, buffer, sizeof(buffer) - 1, 0);
+        bytes_received = recv(client_socket, buffer, sizeof(buffer) - 1, 0); // TODO: Incorporate method of filtering with dll or such
         if (bytes_received > 0) {
             buffer[bytes_received] = '\0';
             chat_history += buffer;
@@ -109,7 +109,7 @@ int main(int argc, char* argv[]) {
         std::getline(std::cin, message);
         if (message == "exit") {
             std::cout << "Exiting..." << std::endl;
-            break;
+            break; 
         }
         // Print the message sent by the user to their own screen
         chat_history += username + ": " + message + "\n";

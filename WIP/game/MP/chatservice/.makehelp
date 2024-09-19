@@ -1,0 +1,12 @@
+- `make`, `make help`      : Show this help screen.
+- `make all`               : Build all binaries (requires cross compiler).
+- `make linux_server`      : Build the Chat Server for GNU/Linux.
+- `make linux_client`      : Build the debug client for GNU/Linux.
+- `make linux_guiclient`   : Build the Default Chat Client for GNU/Linux.
+- `make mac_server`        : Build the Chat Server for macOS X+.
+- `make mac_client`        : Build the debug client for macOS X+.
+- `make mac_guiclient`     : Build the Default Chat Client for macOS X+.
+- `make win_server`        : Build the Chat Server for Windows 2000+.
+- `make win_client`        : Build the debug client for Windows 2000+.
+- `make win_guiclient`     : Build the Default Chat Client for Windows XP+.
+- `make requirements`      : Install pip packages for all GUI Clients.

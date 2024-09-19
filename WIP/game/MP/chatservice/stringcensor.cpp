@@ -1,4 +1,4 @@
-#include "StringCensor.h"
+#include "chatheaders/StringCensor.hpp"
 #include <fstream>
 #include <sstream>
 #include <algorithm>

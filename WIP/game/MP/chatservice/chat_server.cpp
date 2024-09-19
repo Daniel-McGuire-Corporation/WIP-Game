@@ -1,18 +1,26 @@
-#include <iostream>
-#include <string>
-#include <vector>
+// CHAT_SERVER.CPP 
+//  Written by Daniel McGuire Thu Sep 19 2:14PM CST (OSX, 15.0.0)
+//
+//  Name: untitledgame Chat Service
+//
+//  Purpose: Chat Service for untitledgame Multiplayer (WIP)
+// This file may be commented very much, as it is in a few of my c++ videos.
+#include <iostream> 
+#include <string>   
+#include <vector>   
 #include <thread>
 #include <mutex>
 #include <atomic>
 #include <unordered_map>
 #include <deque>
 #include <algorithm>
-
-#ifdef _WIN32
+#include "chatheaders/StringCensor.hpp"  // Include the censoring functionality
+// Networking:
+#ifdef _WIN32 // If Windows:
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #pragma comment(lib, "Ws2_32.lib")
-#else
+#else // If not windows:
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <unistd.h>
@@ -20,8 +28,6 @@
 #include <cstring>
 #define closesocket close
 #endif
-
-#include "StringCensor.h"  // Include the censoring functionality
 
 std::vector<int> clients;
 std::mutex clients_mutex;
@@ -38,7 +44,7 @@ void broadcast_message(const std::string& message, int sender_socket) {
         }
     }
 }
-
+   
 void handle_client(int client_socket) {
     std::cout << "Client handler started for socket: " << client_socket << std::endl;
     char buffer[1024];

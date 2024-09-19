@@ -6,7 +6,7 @@ import threading
 class ChatClient:
     def __init__(self, root):
         self.root = root
-        self.root.title("Chat Client")
+        self.root.title("Untitled Game | Chat:")
 
         # Initialize GUI components
         self.text_area = scrolledtext.ScrolledText(root, state='disabled', wrap='word')

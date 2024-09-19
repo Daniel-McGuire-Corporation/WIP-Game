@@ -934,3 +934,5 @@ WIP/chat/linux_client
 WIP/chat/linux_server
 WIP/newdebug/.vscode/settings.json
 /WIP/test
+*.spec
+
