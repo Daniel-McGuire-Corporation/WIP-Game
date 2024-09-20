@@ -3,18 +3,14 @@
 	{
 		"selected_items":
 		[
+			[
+				"gui",
+				"gui_ext"
+			]
 		]
 	},
 	"buffers":
 	[
-		{
-			"file": "project.sublime-project",
-			"settings":
-			{
-				"buffer_size": 45,
-				"line_ending": "Unix"
-			}
-		}
 	],
 	"build_system": "",
 	"build_system_choices":
@@ -48,12 +44,15 @@
 	},
 	"expanded_folders":
 	[
-		"/Volumes/USB/docs/src/game"
+		"/Volumes/USB/docs/src/game",
+		"/Volumes/USB/docs/src/game/game"
 	],
 	"file_history":
 	[
-		"/Volumes/USB/docs/src/game/WIP/game/MP/chatservice/.makehelp",
 		"/Volumes/USB/docs/src/game/WIP/game/MP/chatservice/makefile",
+		"/Volumes/USB/docs/src/game/WIP/game/MP/chatservice/makehelper.sh",
+		"/Volumes/USB/docs/src/game/assets/txt/locale/en_US.ini",
+		"/Volumes/USB/docs/src/game/WIP/game/MP/chatservice/.makehelp",
 		"/Volumes/USB/docs/src/game/WIP/game/MP/chatservice/chat_clientgui.py",
 		"/Volumes/USB/docs/src/game/WIP/game/MP/chatservice/chat_server.cpp",
 		"/Volumes/USB/docs/src/game/WIP/game/MP/chatservice/requirements.txt",
@@ -101,38 +100,6 @@
 		{
 			"sheets":
 			[
-				{
-					"buffer": 0,
-					"file": "project.sublime-project",
-					"selected": true,
-					"semi_transient": true,
-					"settings":
-					{
-						"buffer_size": 45,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JSON/JSON.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"stack_multiselect": false,
-					"type": "text"
-				}
 			]
 		}
 	],
