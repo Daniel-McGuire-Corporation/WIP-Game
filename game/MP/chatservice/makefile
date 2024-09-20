@@ -18,12 +18,15 @@ GUI_SOURCE = chat_clientgui.py
 # Project Titles
 LINUX_SERVER_NAME = "Chat Server"
 LINUX_CLIENT_NAME = "Debug Client"
+LINUX_GUI_NAME = "In-Game Chat Component"
 MAC_SERVER_NAME = "Chat Server"
 MAC_CLIENT_NAME = "Debug Client"
-MAC_GUI_NAME = "chatugmp"
+MAC_GUI_NAME = "In-Game Chat Component"
 WIN_SERVER_NAME = "Chat Server"
 WIN_CLIENT_NAME = "Debug Client"
-WIN_GUI_NAME = "chatugmp"
+WIN_GUI_NAME = "In-Game Chat Component"
+GUI_EXT = "chatugmp"
+GUIV_NAME = "chatclient"
 
 # Detect OS and architecture
 OS := $(shell uname)
@@ -65,7 +68,9 @@ MAC_SERVER_OUT = $(BIN_DIR)/mac_server
 MAC_CLIENT_OUT = $(BIN_DIR)/mac_client
 WIN_SERVER_OUT = $(BIN_DIR)/win_server.exe
 WIN_CLIENT_OUT = $(BIN_DIR)/win_client.exe
-MAC_GUI_DIR = $(BIN_DIR)/$(MAC_GUI_NAME).app
+MAC_GUI_DIR = $(BIN_DIR)/$(GUI_EXT).app
+WIN_GUI_DIR = $(BIN_DIR)/$(GUI_EXT).exe
+LINUX_GUI_DIR = $(BIN_DIR)/$(GUI_EXT).out
 
 # Linux targets
 linux_server: $(SERVER_SOURCES:.cpp=.o)
@@ -78,6 +83,10 @@ linux_client: $(CLIENT_SOURCES:.cpp=.o)
 	@mkdir -p $(BIN_DIR)
 	@$(CXX) $(CXXFLAGS) -o $(LINUX_CLIENT_OUT) $^
 
+mac_guiclient: 
+	$(call print_info, $(LINUX_GUI_NAME))
+	@pyinstaller --onefile --name $(GUI_EXT) --distpath $(BIN_DIR) $(GUI_SOURCE)
+
 # macOS targets
 mac_server: $(SERVER_SOURCES:.cpp=.o)
 	$(call print_info, $(MAC_SERVER_NAME))
@@ -88,9 +97,6 @@ mac_client: $(CLIENT_SOURCES:.cpp=.o)
 	$(call print_info, $(MAC_CLIENT_NAME))
 	@mkdir -p $(BIN_DIR)
 	@clang++ $(CXXFLAGS) -o $(MAC_CLIENT_OUT) $^
-
-mac_guiclient: $(GUI_SOURCE)
-	@./makehelper.sh create_app $(GUI_SOURCE) $(MAC_GUI_NAME) $(BIN_DIR)
 
 # Windows targets
 win_server: $(SERVER_SOURCES:.cpp=.o)
@@ -103,10 +109,14 @@ win_client: $(CLIENT_SOURCES:.cpp=.o)
 	@mkdir -p $(BIN_DIR)
 	@$(WIN_CXX) $(WIN_FLAGS) -o $(WIN_CLIENT_OUT) $^
 
+win_guiclient: 
+	$(call print_info, $(WIN_GUI_NAME))
+	@pyinstaller --onefile --name $(GUI_EXT) --distpath $(BIN_DIR) $(GUI_SOURCE)
+
 # Clean target
 clean:
 	@echo "Cleaning up build artifacts..."
-	rm -rf $(BIN_DIR) build/ dist/ *.spec
+	rm -rf bin/ build/ dist/ *.spec
 	@echo "Clean complete."
 
 # Object file rule

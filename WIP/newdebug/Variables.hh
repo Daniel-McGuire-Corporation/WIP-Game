@@ -1,1 +1,0 @@
-float playerSpeed = 5.5;
