@@ -3,21 +3,25 @@
 
 > [!WARNING]
 > 
-> Do not use the make tool with any other OS than Windows right now!
+> Do not use the make tool with any other OS than Windows and macOS right now!
 
 ## Build-Prerequisites
 
 > [!NOTE]
 >
-> Linux Development hasn't started yet. macOS Version needs help.
+> Linux Development hasn't started yet. macOS Version won't compile. macOS make sucks.
 
-| OS: | Windows | Linux | macOS |
-|-----|---------|-------|-------|
-| Minimum: | Windows 10 | Ubuntu 22.04 | macOS Monterey (Intel) |
-| Python: | [3.12.6](https://www.python.org/ftp/python/3.12.5/python-3.12.5-amd64.exe) | sudo apt install python | [3.12.6](https://www.python.org/ftp/python/3.12.6/python-3.12.6-macos11.pkg) |
-| IDE: | [Visual Studio 2022 Build Tools](https://aka.ms/vs/17/release/vs_BuildTools.exe) | sudo snap install --classic code | [Xcode](https://developer.apple.com/xcode/) |
-| PowerShell: | [7.4.5](https://github.com/PowerShell/PowerShell/releases/download/v7.4.5/PowerShell-7.4.5-win-x64.msi) | sudo snap install powershell | [7.4.5](https://github.com/PowerShell/PowerShell/releases/download/v7.4.5/powershell-lts-7.4.5-osx-x64.pkg) |
-| Misc: | [MSYS2](https://github.com/msys2/msys2-installer/releases/download/2024-07-27/msys2-x86_64-20240727.exe) (Optional) | [QT](https://www.qt.io/download-dev) | [HomeBrew](brew.sh) | 
+'*' = Required
+
+| --- | Windows | Linux | macOS | Recommended |
+|-----|---------|-------|-------|-------|
+| Minimum: | Windows 10 | Ubuntu 22.04 | macOS Monterey (Intel) | --- |
+| Misc: | [MSYS2](https://github.com/msys2/msys2-installer/releases/download/2024-07-27/msys2-x86_64-20240727.exe) (Optional) | --- | [HomeBrew](brew.sh)* | --- |
+| Python*: | winget install python.python) | sudo apt install python | brew install python | --- |
+| Build Tools*: | [Visual Studio 2022 Build Tools](https://aka.ms/vs/17/release/vs_BuildTools.exe) | sudo apt install gcc | brew install clang | --- |
+| PowerShell*: | [7.4.5](https://github.com/PowerShell/PowerShell/releases/download/v7.4.5/PowerShell-7.4.5-win-x64.msi) | sudo snap install powershell | [7.4.5](https://github.com/PowerShell/PowerShell/releases/download/v7.4.5/powershell-lts-7.4.5-osx-x64.pkg) | --- |
+| IDE: | ANY | ANY | ANY | [VSCodium](vscodium.com) |
+
 
 
 ## Building the Project on macOS
