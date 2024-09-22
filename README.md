@@ -11,17 +11,16 @@
 >
 > Linux Development hasn't started yet. macOS Version won't compile. macOS make sucks.
 
-'*' = Required
-
-| --- | Windows | Linux | macOS | Recommended |
-|-----|---------|-------|-------|-------|
-| Minimum: | Windows 10 | Ubuntu 22.04 | macOS Monterey (Intel) | --- |
-| Misc: | [MSYS2](https://github.com/msys2/msys2-installer/releases/download/2024-07-27/msys2-x86_64-20240727.exe) (Optional) | --- | [HomeBrew](brew.sh)* | --- |
-| Python*: | winget install python.python) | sudo apt install python | brew install python | --- |
-| Build Tools*: | [Visual Studio 2022 Build Tools](https://aka.ms/vs/17/release/vs_BuildTools.exe) | sudo apt install gcc | brew install clang | --- |
-| PowerShell*: | [7.4.5](https://github.com/PowerShell/PowerShell/releases/download/v7.4.5/PowerShell-7.4.5-win-x64.msi) | sudo snap install powershell | [7.4.5](https://github.com/PowerShell/PowerShell/releases/download/v7.4.5/powershell-lts-7.4.5-osx-x64.pkg) | --- |
-| IDE: | ANY | ANY | ANY | [VSCodium](vscodium.com) |
-
+'*' = **REQUIRED**
+| **---**        | **Windows**                            | **Linux**              | **macOS**                          | **Recommended**            |
+|----------------|----------------------------------------|------------------------|------------------------------------|----------------------------|
+| **Minimum**    | Windows 10                             | Ubuntu 22.04            | macOS Monterey (Intel)             | ---                        |
+| **Misc**       | [MSYS2](https://github.com/msys2/msys2-installer/releases/download/2024-07-27/msys2-x86_64-20240727.exe) (Optional) | ---                    | [HomeBrew](https://github.com/Homebrew/brew/releases/download/4.3.23/Homebrew-4.3.23.pkg)* | ---                        |
+| --- | [Chocolatey](https://chocolatey.org/install)* | ---                    | ---                                | ---                        |
+| **Python\***   | `choco install python`                 | `sudo apt install python` | `brew install python`              | ---                        |
+| **Build Tools\*** | `choco install visualstudio2022buildtools` | `sudo apt install gcc`   | `brew install clang`               | ---                        |
+| **PowerShell\*** | `choco install powershell`            | `sudo snap install powershell` | `brew install powershell`          | ---                        |
+| **IDE**        | ANY                                    | ANY                    | ANY                                | [VSCodium](https://vscodium.com) |
 
 
 ## Building the Project on macOS
