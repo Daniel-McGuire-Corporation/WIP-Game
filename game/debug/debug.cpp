@@ -1,17 +1,18 @@
-#include "debug.hpp"
-#include "../game/game.hpp"
+#ifdef _WIN32
+#include <Windows.h>
+#endif
+
 #include <iostream>
 #include <string>
 #include <sstream>
 #include <thread>
 #include <atomic>
 #include <SFML/Graphics.hpp>
-#include <Windows.h>
 #include <map>
 #include <algorithm>
+#include "../game/game.hpp"
 #include "../vari.hpp"
 #include "../ai/enemy.hpp"
-
 
 sf::RectangleShape player(sf::Vector2f(50.0f, 50.0f));
 

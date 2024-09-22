@@ -9,7 +9,7 @@ def run_make_ps1(args):
         print("Please report an issue on github.")
         print("Error 102")
     elif os_name == "Darwin":  # macOS
-        subprocess.run(["pwsh", "-ExecutionPolicy", "Bypass", "./tools/src/make/make.ps1"] + args)
+        subprocess.run(["pwsh", "-ExecutionPolicy", "Bypass", "./tools/src/make/makeosx.ps1"] + args)
     elif os_name == "Linux":
         print("Linux version is coming soon! Stay tuned.")
     else:

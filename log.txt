@@ -1,0 +1,4 @@
+[3J[H[2JUntitled-Game Make Script
+(c) 2024 Daniel McGuire
+
+This script is in alpha.

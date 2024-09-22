@@ -1,5 +1,5 @@
 // CHAT_SERVER.CPP 
-//  Written by Daniel McGuire Thu Sep 20 7:35 aCST (OSX, 15.0.0)
+//  Written by Daniel McGuire Thu Sep 20 7:35a CST (OSX, 15.0.0)
 //
 //  Name: untitledgame Chat Service
 //
@@ -16,7 +16,7 @@
 #include <algorithm>
 #include "chatheaders/StringCensor.hpp"  // Include the censoring functionality
 // Networking:
-#ifdef _WIN32 // If Windows:
+#ifdef _WIN32 // If Windows:  
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #pragma comment(lib, "Ws2_32.lib")

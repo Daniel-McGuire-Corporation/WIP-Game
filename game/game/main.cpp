@@ -1,7 +1,28 @@
 #include "def.hpp"
 #include "engine.hpp"
 #include "dmc.hpp"
-// Variables
+
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <cstdlib>
+#include <sstream>
+#include <thread>
+#include <chrono>
+#include <string>
+#include <ctime>
+#include <atomic>
+
+// Platform-specific includes
+#ifdef _WIN32
+    #include <windows.h>
+    #include <filesystem>
+#elif __APPLE__
+    #include <unistd.h>
+    #include <filesystem>
+    #include <dlfcn.h>
+#endif
+
 const int TILE_SIZE = 40;
 const float DEATH_HEIGHT = 600.0f;
 std::atomic<bool> running(true);
@@ -92,38 +113,55 @@ void updateCamera(sf::RenderWindow& window, sf::RectangleShape& player) {
 }
 
 bool asiLoader() {
+    #ifdef _WIN32
     std::string folderPath = "./scripts/";
+    #elif __APPLE__
+    std::string folderPath = "/Users/" + std::string(getenv("USER")) + "/Library/Application Support/untitledgame/plug-ins/asitype/user";
+    fs::create_directories(folderPath);
+    #endif
+    
     for (const auto& entry : fs::directory_iterator(folderPath)) {
-        if (entry.path().extension() == ".asi") {
-            HMODULE hModule = LoadLibraryW(entry.path().c_str()); // Use LoadLibraryW for wide characters
+        if (entry.path().extension() == ".asi" || entry.path().extension() == ".so") {
+            #ifdef _WIN32
+            HMODULE hModule = LoadLibraryW(entry.path().c_str());
             if (!hModule) {
                 std::wcerr << L"Failed to load ASI: " << entry.path() << std::endl;
                 return false;
             } else {
                 std::wcout << L"Successfully loaded ASI: " << entry.path() << std::endl;
             }
+            #elif __APPLE__
+            void* hModule = dlopen(entry.path().c_str(), RTLD_NOW);
+            if (!hModule) {
+                std::cerr << "Failed to load ASI: " << entry.path() << std::endl;
+                return false;
+            } else {
+                std::cout << "Successfully loaded ASI: " << entry.path() << std::endl;
+            }
+            #endif
         }
     }
     return true;
 }
 
-// Function to show a notification
-
 #ifdef DEBUG_BUILD
 int main() {
 #else
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
+int main(int argc, char* argv[]) {
 #endif
-    std::cout << APP_NAME << "Debug Prompt (C++ 17)" << std::endl;
+    #ifdef DEBUG_BUILD
+    std::cout << APP_NAME << " Debug Prompt" << std::endl;
+    #endif
 
-    // Load ASIs from the ./scripts/ folder
+    // Load ASIs from the specified folder
     if (!asiLoader()) {
         std::cerr << "ASI Loader experienced an error" << std::endl;
+        #ifdef _WIN32
         MessageBoxA(NULL, "Error loading ASIs", "ASI Load Error", MB_ICONERROR | MB_OK);
-
+        #endif
         return -1; // Exit if ASI loading fails
     }
-     std::srand(static_cast<unsigned int>(std::time(nullptr)));
+    std::srand(static_cast<unsigned int>(std::time(nullptr)));
 
     #ifdef DEBUG_BUILD
     sf::RenderWindow window(sf::VideoMode(800, 600), "debug");
@@ -131,49 +169,47 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     sf::RenderWindow window(sf::VideoMode(800, 600), APP_NAME);
     #endif
 
-    sf::Music music1;
-    if (!music1.openFromFile("./data/music/in1.wav")) {
-        return EXIT_FAILURE;
-    }
+    // Load textures based on platform
+    std::string texturePath;
+    #ifdef _WIN32
+    texturePath = "./data/txd/";
+    #elif __APPLE__
+    texturePath = "/Applications/untitledgame.app/Contents/Resources/textures/";
+    #endif
 
-    sf::Music music2;
-    if (!music2.openFromFile("./data/music/in2.wav")) {
-        return EXIT_FAILURE;
-    }
-    music1.setVolume(musicVolume);
-    music2.setVolume(musicVolume);
-    std::vector<sf::Music*> musicFiles = {&music1, &music2};
-
-    sf::Clock clock;
-    sf::Time firstPlayTime = sf::seconds(35.0f); // Start playing 35 seconds after the game starts
-    sf::Time nextPlayTime;
-
-    // Load textures
     sf::Texture backgroundTexture;
-    if (!backgroundTexture.loadFromFile("./data/txd/back.png")) {
-        std::cerr << "Error loading background texture" << std::endl;   
+    if (!backgroundTexture.loadFromFile(texturePath + "back.png")) {
+        std::cerr << "Error loading background texture" << std::endl;
+        #ifdef _WIN32
         MessageBoxA(NULL, "Error loading background texture", "Texture Error", MB_ICONERROR | MB_OK);
+        #endif
         return -1; // Exit if texture loading fails
     }
 
     sf::Texture playerTexture;
-    if (!playerTexture.loadFromFile("./data/txd/user.png")) {
+    if (!playerTexture.loadFromFile(texturePath + "user.png")) {
         std::cerr << "Error loading player texture" << std::endl;
+        #ifdef _WIN32
         MessageBoxA(NULL, "Error loading player texture", "Texture Error", MB_ICONERROR | MB_OK);
+        #endif
         return -1; // Exit if texture loading fails
     }
 
     sf::Texture floorTexture;
-    if (!floorTexture.loadFromFile("./data/txd/base.png")) {
+    if (!floorTexture.loadFromFile(texturePath + "base.png")) {
         std::cerr << "Error loading floor texture" << std::endl;
+        #ifdef _WIN32
         MessageBoxA(NULL, "Error loading floor texture", "Texture Error", MB_ICONERROR | MB_OK);
+        #endif
         return -1; // Exit if texture loading fails
     }
 
     sf::Texture platformTexture;
-    if (!platformTexture.loadFromFile("./data/txd/platform.png")) {
+    if (!platformTexture.loadFromFile(texturePath + "platform.png")) {
         std::cerr << "Error loading platform texture" << std::endl;
+        #ifdef _WIN32
         MessageBoxA(NULL, "Error loading platform texture", "Texture Error", MB_ICONERROR | MB_OK);
+        #endif
         return -1; // Exit if texture loading fails
     }
 
@@ -186,8 +222,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     }
     player.setPosition(380.0f, -100.0f); // Start 280 pixels to the right of the original start position
 
-    // Define a level file
-    std::string levelFile = "data/levels/level1.ini"; // Set the level file here
+    // Define a level file based on platform
+    std::string levelFile;
+    #ifdef _WIN32
+    levelFile = "./data/levels/level1.ini";
+    #elif __APPLE__
+    levelFile = "/Applications/untitledgame.app/Contents/Resources/level.ini";
+    #endif
 
     // Load the level
     std::vector<sf::RectangleShape> platforms = loadLevel(levelFile, floorTexture.getSize().x > 0 ? &floorTexture : nullptr, platformTexture.getSize().x > 0 ? &platformTexture : nullptr);
@@ -197,25 +238,19 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     startDebugThread();
     #endif
 
-    // Wait for 2 seconds before dropping the player
-    #ifdef DEBUG_BUILD
-    std::this_thread::sleep_for(std::chrono::seconds(10));
-    #endif
     float velocityY = 0.0f; // Initialize velocityY
     bool isJumping = false; // Initialize isJumping
     std::vector<Enemy> enemies;
     sf::Texture enemyTexture;
-    if (!enemyTexture.loadFromFile("./data/txd/enemy.png")) {
+    if (!enemyTexture.loadFromFile(texturePath + "enemy.png")) {
         std::cerr << "Error loading enemy texture" << std::endl;
+        #ifdef _WIN32
         MessageBoxA(NULL, "Error loading enemy texture", "Texture Error", MB_ICONERROR | MB_OK);
+        #endif
         return -1; // Exit if texture loading fails
     }
 
-    // Spawn initial enemies
-    for (int i = 0; i < 3; ++i) {
-        enemies.emplace_back(enemyTexture, 100.0f * i, 0.0f); // Spawn enemies at different x positions
-    }
-
+    // Main game loop
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event)) {
@@ -223,81 +258,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                 window.close();
         }
 
-        // Check if the window is focused and the game is running before handling input
-        if (window.hasFocus() && running) {
-            // Handle player movement
-            handlePlayerMovement(player, velocityY, isJumping);
-
-            // Collision detection with platforms
-            for (auto& platform : platforms) {
-                if (isColliding(player, platform)) {
-                    player.setPosition(player.getPosition().x, platform.getPosition().y - player.getSize().y);
-                    velocityY = 0.0f;
-                    isJumping = false;
-                }
-            }
-
-            // Update enemies
-            updateEnemies(enemies, player, window.getSize().y);
-
-            // Handle enemy collisions
-            handleEnemyCollisions(enemies, player);
-
-            // Check if the player has fallen below the death height
-            if (player.getPosition().y > DEATH_HEIGHT) {
-                std::cout << "Player fell below cutoff." << std::endl;
-                MessageBoxA(NULL, "You walked off the edge!", "You Died!", MB_ICONERROR | MB_OK);
-                return -1;
-            }
-        }
-
-        window.clear();
-        if (clock.getElapsedTime() >= firstPlayTime) {
-            if (!music1.getStatus() && !music2.getStatus()) { // No music is currently playing
-                // Pick a random music file
-                int randomIndex = std::rand() % musicFiles.size();
-                sf::Music* selectedMusic = musicFiles[randomIndex];
-
-                // Play selected music
-                selectedMusic->play();
-
-                // Set the volume in case it's changed
-                selectedMusic->setVolume(musicVolume);
-
-                // Set the next play time after a random interval (30 - 70 seconds)
-                nextPlayTime = clock.getElapsedTime() + sf::seconds(static_cast<float>(std::rand() % 41 + 30));
-            }
-        }
-
-        // Check if it's time to play the next track
-        if (clock.getElapsedTime() >= nextPlayTime && (music1.getStatus() == sf::Music::Stopped || music2.getStatus() == sf::Music::Stopped)) {
-            // Pick a random music file
-            int randomIndex = std::rand() % musicFiles.size();
-            sf::Music* selectedMusic = musicFiles[randomIndex];
-
-            // Play selected music
-            selectedMusic->play();
-
-            // Set the volume in case it's changed
-            selectedMusic->setVolume(musicVolume);
-
-            // Set the next play time after a random interval (30 - 70 seconds)
-            nextPlayTime = clock.getElapsedTime() + sf::seconds(static_cast<float>(std::rand() % 41 + 30));
-        }
-
-
-        // Draw the background as tiles
-        drawTiledBackground(window, backgroundTexture);
-
+        handlePlayerMovement(player, velocityY, isJumping);
         updateCamera(window, player);
 
-        window.draw(player);
-        for (auto& platform : platforms) {
+        window.clear();
+        drawTiledBackground(window, backgroundTexture);
+        for (const auto& platform : platforms) {
             window.draw(platform);
         }
-        for (auto& enemy : enemies) {
-            enemy.draw(window);
-        }
+        window.draw(player);
         window.display();
     }
 
