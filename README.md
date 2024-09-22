@@ -25,8 +25,20 @@
 
 
 ## Building the Project on macOS
-1. ~Setup make tool~ (REDACTED) This can cause IRREVERSABLE HARM to your system if PyInstaller is not installed!
-1. Use Xcode to manage the project
+1. **Clone the Repository**
+   ```bash
+   git clone --recurse-submodules https://github.com/Daniel-McGuire-Corporation/WIP-Game.git
+   cd WIP-Game
+   pwsh
+   ```
+2. Setup Make Tool in PowerShell
+   ```pwsh
+   ./makeinit
+   ```
+3. **Compile the Project** [Learn Make Syntax (Some parts may be different due to platform differences.)](https://github.com/Daniel-McGuire-Corporation/WIP-Game/wiki/Make-Guide)
+   ```bash
+   ./make -compile (-run) -[game, tools, all]
+   ```
 
 ## Building the Project on Windows (USING Visual Studio Powershell)
 
@@ -37,7 +49,7 @@
    cd WIP-Game
    ```
    
-3. **Setup** (Does not require make, uses custom program)
+2. **Setup** (Does not require make, uses custom program)
    ```bash
    ./makeinit
    ./setenv
@@ -45,7 +57,7 @@
    ```
 
 
-2. **Compile the Project** [Learn Make Syntax](https://github.com/Daniel-McGuire-Corporation/WIP-Game/wiki/Make-Guide)
+3. **Compile the Project** [Learn Make Syntax](https://github.com/Daniel-McGuire-Corporation/WIP-Game/wiki/Make-Guide)
    ```bash
    make -compile (-run) -[game, tools, all]
    ```
