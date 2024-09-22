@@ -29,14 +29,14 @@
    ```bash
    git clone --recurse-submodules https://github.com/Daniel-McGuire-Corporation/WIP-Game.git
    cd WIP-Game
-   pwsh
    ```
 2. Setup Make Tool in PowerShell
    ```pwsh
+      pwsh
    ./makeinit
    ```
 3. **Compile the Project** [Learn Make Syntax (Some parts may be different due to platform differences.)](https://github.com/Daniel-McGuire-Corporation/WIP-Game/wiki/Make-Guide)
-   ```bash
+   ```pwsh
    ./make -compile (-run) -[game, tools, all]
    ```
 
@@ -44,13 +44,13 @@
 
 1. **Clone the Repository**
 
-   ```bash
+   ```pwsh
    git clone --recurse-submodules https://github.com/Daniel-McGuire-Corporation/WIP-Game.git
    cd WIP-Game
    ```
    
 2. **Setup** (Does not require make, uses custom program)
-   ```bash
+   ```pwsh
    ./makeinit
    ./setenv
    make -setupengine
@@ -58,7 +58,7 @@
 
 
 3. **Compile the Project** [Learn Make Syntax](https://github.com/Daniel-McGuire-Corporation/WIP-Game/wiki/Make-Guide)
-   ```bash
+   ```pwsh
    make -compile (-run) -[game, tools, all]
    ```
 ## USAGE:
@@ -77,7 +77,7 @@ Levels are defined in `.ini` files located in the `data/levels` directory. The f
 
 To enable debugging features, you have to recomp:
 
-```bash
+```pwsh
 make -compile (-run) -[game, tools, all] -debug
 ```
 
@@ -85,7 +85,7 @@ make -compile (-run) -[game, tools, all] -debug
 
 - The game currently assumes the level file format is correct and doesn't handle errors in the level file.
 - Collision detection is basic and might need improvements for more complex levels.
-- macOS Version is not loading textures and just doesnt really want to work.
+- macOS Version is not compiling.
 
 ## License
 
@@ -98,7 +98,5 @@ For questions or issues, please contact [Daniel McGuire](mailto:danielmcguire23@
 ## Acknowledgments
 
 - SFML: A great library for multimedia applications.
-- QT: A great GUI library
-- Apple: swift (took me 2 days to learn the basics lol)
 - DMC MVPs
 
