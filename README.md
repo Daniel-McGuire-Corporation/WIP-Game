@@ -1,9 +1,11 @@
 
 # Untitled Game
 
-> [!WARNING]
-> 
-> Do not use the make tool with any other OS than Windows and macOS right now!
+Supported OSs:
+1. Windows (Alpha stage) (Download from Releases)
+2. macOS (Development only) (Learn to Compile it below)
+3. ~Linux~ (Soon maybe) (Needs X11 or QT.)
+
 
 ## Build-Prerequisites
 
