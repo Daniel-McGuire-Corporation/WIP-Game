@@ -21,6 +21,9 @@
     #include <unistd.h>
     #include <filesystem>
     #include <dlfcn.h>
+#else
+    #include <unistd.h>
+    #include <filesystem>
 #endif
 
 const int TILE_SIZE = 40;

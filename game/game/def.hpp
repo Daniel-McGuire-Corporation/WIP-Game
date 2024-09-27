@@ -16,5 +16,3 @@
 #include <ctime>
 #include <filesystem>
 
-// CONTEXT: ./game/game/def.hpp 
-// INSTRUCTIONS: No improvements, just cross-platform conversion
