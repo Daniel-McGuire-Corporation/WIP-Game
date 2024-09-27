@@ -937,3 +937,5 @@ WIP/newdebug/.vscode/settings.json
 *.spec
 
 UntitledGame.sublime-workspace
+UntitledGame.sublime-workspace
+*.sublime-workspace
